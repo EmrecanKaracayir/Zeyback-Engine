@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\cursors\pointer.cur" />
+    <None Include="src\Support\algorithm" />
+    <None Include="src\Support\assert" />
+    <None Include="src\Support\byte" />
+    <None Include="src\Support\gsl" />
+    <None Include="src\Support\narrow" />
+    <None Include="src\Support\pointers" />
+    <None Include="src\Support\span" />
+    <None Include="src\Support\span_ext" />
+    <None Include="src\Support\util" />
+    <None Include="src\Support\zstring" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Engine\File\Util\path.hpp" />
+    <ClInclude Include="src\Engine\Math\Rectangle.tpp" />
+    <ClInclude Include="src\Engine\Math\Vector2.tpp" />
+    <ClInclude Include="src\Game\Resource\resource.hpp" />
+    <ClInclude Include="src\App\App.hpp" />
+    <ClInclude Include="src\Engine\Engine.hpp" />
+    <ClInclude Include="src\Engine\Event\Mouse.hpp" />
+    <ClInclude Include="src\Engine\Graphics\Texture.hpp" />
+    <ClInclude Include="src\Engine\Input\Mouse.hpp" />
+    <ClInclude Include="src\Game\Config\Config.hpp" />
+    <ClInclude Include="src\Game\Game.hpp" />
+    <ClInclude Include="src\Game\Interface\IGame.hpp" />
+    <ClInclude Include="src\pch.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\Bitmap.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\Brush.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\DeviceContext.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\App\App.cpp" />
+    <ClCompile Include="src\Engine\Engine.cpp" />
+    <ClCompile Include="src\Engine\File\Util\path.cpp" />
+    <ClCompile Include="src\Engine\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\GDI\Bitmap.cpp" />
+    <ClCompile Include="src\Platform\Windows\GDI\Brush.cpp" />
+    <ClCompile Include="src\Platform\Windows\GDI\DeviceContext.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\res.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\placeholder.bmp" />
+    <Image Include="res\icons\app.ico" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{0ce89d95-6d20-489e-92eb-d634b4b12f8c}</ProjectGuid>
+    <RootNamespace>Zeyback</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>src</AdditionalIncludeDirectories>
+      <AdditionalOptions>/w44365 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <ShowProgress>true</ShowProgress>
+      <AdditionalIncludeDirectories>src;</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>$(IntDir)res\%(Filename).res</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>src</AdditionalIncludeDirectories>
+      <AdditionalOptions>/w44365 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <ShowProgress>true</ShowProgress>
+      <AdditionalIncludeDirectories>src;</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>$(IntDir)res\%(Filename).res</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>src</AdditionalIncludeDirectories>
+      <AdditionalOptions>/w44365 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <ShowProgress>true</ShowProgress>
+      <AdditionalIncludeDirectories>src;</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>$(IntDir)res\%(Filename).res</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>src</AdditionalIncludeDirectories>
+      <AdditionalOptions>/w44365 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <ShowProgress>true</ShowProgress>
+      <AdditionalIncludeDirectories>src;</AdditionalIncludeDirectories>
+      <ResourceOutputFileName>$(IntDir)res\%(Filename).res</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

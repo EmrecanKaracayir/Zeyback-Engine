@@ -1,0 +1,5 @@
+# Build results
+out/
+
+# Visual Studio files
+.vs/

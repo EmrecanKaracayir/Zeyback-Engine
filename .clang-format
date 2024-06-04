@@ -1,0 +1,277 @@
+# +----------------------------------------------------------------------------+
+# |                       C++ Clang-Format Configuration                       |
+# |                              Version 24.05.24                              |
+# +----------------------------------------------------------------------------+
+# | What is it?                                                                |
+# | It is a configuration file for Clang-Format, a formatting tool for C, C++, |
+# | and Objective-C code, designed to enforce a consistent coding style and to |
+# | improve code readability. This configuration file achieves modern C++ code |
+# | by comprising a mix of widely recognized guidelines in the C++ community.  |
+# |                                                                            |
+# | How to use it?                                                             |
+# | Simply place it in the root directory of your project. If you are using an |
+# | IDE, specific configurations may be required to enable & use Clang-Format. |
+# | Command line usage, also possible. Refer to the official Clang-Format docs |
+# | for more information.                                                      |
+# |                                                                            |
+# | What is the purpose?                                                       |
+# | It's intended for any C++ project whose authors like the look of Prettier, |
+# | formatting tool for JavaScript, and want to achieve a similar look in C++. |
+# | When combined with my "C++ Clang-Tidy Configuration" file, this becomes a  |
+# | powerful tool to enforce coding standards and best practices.              |
+# |                                                                            |
+# | Who is it for?                                                             |
+# | It is designed for intermediate to advanced C++ developers who are looking |
+# | to improve their code readability and enforce coding styles.               |
+# +----------------------------------------------------------------------------+
+# | File         : .clang-format                                               |
+# | LLVM Version : 18.1.6                                                      |
+# | License      : MIT                                                         |
+# | Language     : YAML                                                        |
+# | C++ Standard : C++20                                                       |
+# | Author       : @EmrecanKaracayir                                           |
+# | Date         : 2024-05-24                                                  |
+# +----------------------------------------------------------------------------+
+---
+# BasedOnStyle: // Unused
+AccessModifierOffset: -2
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: Left
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveBitFields:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: true
+  PadOperators: true
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCaseColons: true
+# AlignConsecutiveTableGenCondOperatorColons: // v19
+# AlignConsecutiveTableGenDefinitionColons:   // v19
+AlignEscapedNewlines: Right
+AlignOperands: AlignAfterOperator
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 1
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowBreakBeforeNoexceptSpecifier: OnlyWithParen
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCompoundRequirementOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+# AttributeMacros: // Unused
+BinPackArguments: false
+BinPackParameters: false
+BitFieldColonSpacing: Both
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterExternBlock: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+# BreakInitializerIndentWidth: // Unused (If unset ContinuationIndentWidth is used)
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Always
+# BreakAfterJavaFieldAnnotations: // Unused (Not C++)
+# BreakAfterReturnType // v19
+BreakArrays: true
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Custom
+BreakBeforeConceptDeclarations: Always
+BreakBeforeInlineASMColon: OnlyMultiline
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+BreakStringLiterals: true
+# BreakTemplateDeclarations // v19
+ColumnLimit: 80
+# CommentPragmas: // Unused
+CompactNamespaces: false
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+DisableFormat: false
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: LogicalBlock
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+# ForEachMacros: // Unused
+# IfMacros:      // Unused
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: ^\".*pch\..*\"$ # Precompiled headers
+    Priority: -1
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: ^\".*\..*\"$ # Project headers
+    Priority: 1
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: ^<.*\..*>$ # Included headers
+    Priority: 2
+    SortPriority: 0
+    CaseSensitive: false
+  - Regex: ^<.*>$ # Standard library headers
+    Priority: 3
+    SortPriority: 0
+    CaseSensitive: false
+IncludeIsMainRegex: $ # Main header
+IncludeIsMainSourceRegex: $ # Main source
+IndentAccessModifiers: false
+IndentCaseBlocks: false
+IndentCaseLabels: false
+IndentExternBlock: AfterExternBlock
+IndentGotoLabels: true
+IndentPPDirectives: BeforeHash
+IndentRequiresClause: true
+IndentWidth: 2
+IndentWrappedFunctionNames: false
+InsertBraces: true
+InsertNewlineAtEOF: true
+InsertTrailingCommas: Wrapped
+IntegerLiteralSeparator:
+  Binary: 4
+  BinaryMinDigits: 0
+  Decimal: 3
+  DecimalMinDigits: 0
+  Hex: 2
+  HexMinDigits: 0
+# JavaImportGroups: // Unused (Not C++)
+# JavaScriptQuotes: // Unused (Not C++)
+# JavaScriptWrapImports: // Unused (Not C++)
+KeepEmptyLinesAtEOF: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+LambdaBodyIndentation: Signature
+Language: Cpp
+LineEnding: LF
+# MacroBlockBegin: // Unused
+# MacroBlockEnd: // Unused
+# Macros: // Unused
+# MainIncludeChar // v19
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: All
+# NamespaceMacros: // Unused
+# ObjCBinPackProtocolList: // Unused (Not C++)
+# ObjCBlockIndentWidth: // Unused (Not C++)
+# ObjCBreakBeforeNestedBlockParam: // Unused (Not C++)
+# ObjCPropertyAttributeOrder: // Unused (Not C++)
+# ObjCSpaceAfterProperty: // Unused (Not C++)
+# ObjCSpaceBeforeProtocolList: // Unused (Not C++)
+PPIndentWidth: -1 # Use IndentWidth
+PackConstructorInitializers: Never
+PenaltyBreakAssignment: 125
+PenaltyBreakBeforeFirstCallParameter: 5
+PenaltyBreakComment: 250
+PenaltyBreakFirstLessLess: 125
+PenaltyBreakOpenParenthesis: 0
+PenaltyBreakScopeResolution: 1000
+PenaltyBreakString: 250
+PenaltyBreakTemplateDeclaration: 25
+PenaltyExcessCharacter: 1000000
+PenaltyIndentedWhitespace: 5
+PenaltyReturnTypeOnItsOwnLine: 200
+PointerAlignment: Left
+QualifierAlignment: Left
+# QualifierOrder: // Unused
+# RawStringFormats: // Unused
+ReferenceAlignment: Pointer
+ReflowComments: true
+RemoveBracesLLVM: false
+RemoveParentheses: ReturnStatement
+RemoveSemicolon: true
+RequiresClausePosition: WithPreceding
+RequiresExpressionIndentation: OuterScope
+SeparateDefinitionBlocks: Always
+ShortNamespaceLines: 1
+SkipMacroDefinitionBody: false
+SortIncludes: CaseSensitive
+# SortJavaStaticImport: // Unused (Not C++)
+SortUsingDeclarations: LexicographicNumeric
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+# SpaceBeforeJsonColon: // Unused (Not C++)
+SpaceBeforeParens: ControlStatements
+SpaceBeforeParensOptions:
+  AfterControlStatements: true
+  AfterForeachMacros: true
+  AfterFunctionDefinitionName: false
+  AfterFunctionDeclarationName: false
+  AfterIfMacros: true
+  AfterOverloadedOperator: false
+  AfterRequiresInClause: false
+  AfterRequiresInExpression: false
+  BeforeNonEmptyParentheses: false
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpacesInContainerLiterals: true
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: 1
+SpacesInParens: Never
+SpacesInParensOptions:
+  InCStyleCasts: false
+  InConditionalStatements: false
+  InEmptyParentheses: false
+  Other: false
+SpacesInSquareBrackets: false
+Standard: c++20
+# StatementAttributeLikeMacros: // Unused
+# StatementMacros: // Unused
+TabWidth: 2
+# TableGenBreakInsideDAGArg: // v19
+# TableGenBreakingDAGArgOperators: // v19
+# TypeNames: // Unused
+# TypeNameMacros: // Unused
+UseTab: Never
+# VerilogBreakBetweenInstancePorts: // Unused (Not C++)

@@ -1,0 +1,1179 @@
+# +----------------------------------------------------------------------------+
+# |                        C++ Clang-Tidy Configuration                        |
+# |                              Version 24.06.02                              |
+# +----------------------------------------------------------------------------+
+# | What is it?                                                                |
+# | It is a configuration file for Clang-Tidy, a static analysis tool from the |
+# | LLVM project, used to analyze C++ code. The configuration file comprises a |
+# | mix of recommended checks from various widely recognized guidelines in the |
+# | C++ community. It is designed to be as strict as possible to catch as many |
+# | common issues as possible.                                                 |
+# |                                                                            |
+# | How to use it?                                                             |
+# | Simply place it in the root directory of your project. If you are using an |
+# | IDE, specific configurations may be required to enable and use Clang-Tidy. |
+# | Command line usage is also possible. Refer to the official Clang-Tidy docs |
+# | for more information.                                                      |
+# |                                                                            |
+# | What is the purpose?                                                       |
+# | It's intended for use in general C++ projects that require a high level of |
+# | code quality. Combined with my "C++ Clang-Format Configuration" file, this |
+# | becomes a powerful tool to enforce coding standards and best practices.    |
+# |                                                                            |
+# | Who is it for?                                                             |
+# | It is designed for intermediate to advanced C++ developers who are looking |
+# | to improve their code quality and enforce coding standards.                |
+# +----------------------------------------------------------------------------+
+# | File         : .clang-tidy                                                 |
+# | LLVM Version : 18.1.6                                                      |
+# | License      : MIT                                                         |
+# | Language     : YAML                                                        |
+# | C++ Standard : C++20                                                       |
+# | Author       : @EmrecanKaracayir                                           |
+# | Date         : 2024-06-02                                                  |
+# +----------------------------------------------------------------------------+
+---
+# ExcludeHeaderFilterRegex: ".*\\projects\\.*\\src\\Support\\.*"
+ExtraArgs: ["-Weverything"]
+ExtraArgsBefore: []
+FormatStyle: "file"
+HeaderFileExtensions: ["hpp", "h", "hh", "hxx", "", "tpp"]
+HeaderFilterRegex: ".*\\projects\\.*\\src\\.*"
+ImplementationFileExtensions: ["cpp", "cppm", "c", "cc", "cxx"]
+InheritParentConfig: true
+SystemHeaders: false
+# UseColor: true // Doesn't work on VS2022 output window
+User: "EmrecanKaracayir"
+WarningsAsErrors: "*"
+
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  clang-diagnostics-*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  google-*,
+  hicpp-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+
+  -clang-diagnostic-c++20-compat,
+  -clang-diagnostic-c++98-compat,
+  -clang-diagnostic-c++98-compat-*,
+  -clang-diagnostic-pragma-once-outside-header,
+  -clang-diagnostic-pre-c++14-compat,
+  -clang-diagnostic-pre-c++17-compat,
+  -clang-diagnostic-switch-default,
+
+  -google-objc-*,
+  -google-readability-avoid-underscore-in-googletest-name,
+  -google-upgrade-googletest-case,
+
+  -bugprone-argument-comment,
+  -bugprone-easily-swappable-parameters,
+
+CheckOptions:
+  - key: bugprone-assert-side-effect.AssertMacros
+    value: ""
+  - key: bugprone-assert-side-effect.CheckFunctionCalls
+    value: true
+  - key: bugprone-assert-side-effect.IgnoredFunctions
+    value: ""
+
+# - key: bugprone-dangling-handle // Default
+
+# - key: bugprone-empty-catch.IgnoreCatchWithKeywords // Default
+  - key: bugprone-empty-catch.IgnoreCatchWithKeywords
+    value: ""
+
+  - key: bugprone-exception-escape.FunctionsThatShouldNotThrow
+    value: ""
+  - key: bugprone-exception-escape.IgnoredExceptions
+    value: ""
+
+  - key: bugprone-implicit-widening-of-multiplication-result.UseCXXStaticCastsInCppSources
+    value: true
+  - key: bugprone-implicit-widening-of-multiplication-result.UseCXXHeadersInCppSources
+    value: true
+
+  - key: bugprone-lambda-function-name.IgnoreMacros
+    value: false
+
+  - key: bugprone-misplaced-widening-cast
+    value: true
+
+  - key: bugprone-non-zero-enum-to-bool-conversion.EnumIgnoreList
+    value: ""
+
+  - key: bugprone-not-null-terminated-result.WantToUseSafeFunctions
+    value: true
+
+# - key: bugprone-optional-value-conversion.OptionalTypes // Default
+# - key: bugprone-optional-value-conversion.ValueMethods // Default
+
+  - key: bugprone-reserved-identifier.Invert
+    value: false
+  - key: bugprone-reserved-identifier.AllowedIdentifiers
+    value: ""
+
+  - key: bugprone-signal-handler.AsyncSafeFunctionSet
+    value: "POSIX"
+
+  - key: bugprone-signed-char-misuse.CharTypdefsToIgnore
+    value: ""
+  - key: bugprone-signed-char-misuse.DiagnoseSignedUnsignedCharComparisons
+    value: true
+
+  - key: bugprone-sizeof-expression.WarnOnSizeOfConstant
+    value: true
+  - key: bugprone-sizeof-expression.WarnOnSizeOfIntegerExpression
+    value: true
+  - key: bugprone-sizeof-expression.WarnOnSizeOfThis
+    value: true
+  - key: bugprone-sizeof-expression.WarnOnSizeOfCompareToConstant
+    value: true
+  - key: bugprone-sizeof-expression.WarnOnSizeOfPointerToAggregate
+    value: true
+
+  - key: bugprone-string-constructor.WarnOnLargeLength
+    value: true
+  - key: bugprone-string-constructor.LargeLengthThreshold
+    value: 2147483647
+# - key: bugprone-string-constructor.StringNames // Default
+
+  - key: bugprone-suspicious-enum-usage.StrictMode
+    value: true
+
+# - key: bugprone-suspicious-missing-comma.SizeThreshold // Default
+# - key: bugprone-suspicious-missing-comma.RatioThreshold // Default
+# - key: bugprone-suspicious-missing-comma.MaxConcatenatedTokens // Default
+
+  - key: bugprone-suspicious-string-compare.WarnOnImplicitComparison
+    value: true
+  - key: bugprone-suspicious-string-compare.WarnOnLogicalNotComparison
+    value: true
+# - key: bugprone-suspicious-string-compare.StringCompareLikeFunctions // Default
+
+# - key: bugprone-suspicious-stringview-data-usage.StringViewTypes // Default
+  - key: bugprone-suspicious-stringview-data-usage.StringViewTypes
+    value: ""
+
+  - key: bugprone-too-small-loop-variable.MagnitudeBitsUpperLimit
+    value: 16
+
+  - key: bugprone-unhandled-self-assignment.WarnOnlyIfThisHasSuspiciousField
+    value: false
+
+# - key: bugprone-unused-local-non-trivial-variable.IncludeTypes // Default
+  - key: bugprone-unused-local-non-trivial-variable.ExcludeTypes
+    value: ""
+
+# - key: bugprone-unused-return-value.CheckedFunctions // Default
+# - key: bugprone-unused-return-value.CheckedReturnTypes // Default
+  - key: bugprone-unused-return-value.AllowCastToVoid
+    value: false
+
+# - key: cert-msc51-cpp.DisallowedSeedTypes // Default
+
+  - key: cert-oop57-cpp.MemSetNames
+    value: ""
+  - key: cert-oop57-cpp.MemCpyNames
+    value: ""
+  - key: cert-oop57-cpp.MemCmpNames
+    value: ""
+
+  - key: concurrency-mt-unsafe.FunctionSet
+    value: any
+
+  - key: cppcoreguidelines-avoid-do-while.IgnoreMacros
+    value: false
+
+  - key: cppcoreguidelines-init-variables.IncludeStyle
+    value: "llvm"
+  - key: cppcoreguidelines-init-variables.MathHeader
+    value: "<cmath>"
+
+# - key: cppcoreguidelines-macro-usage.AllowedRegexp // Default
+  - key: cppcoreguidelines-macro-usage.CheckCapsOnly
+    value: false
+  - key: cppcoreguidelines-macro-usage.IgnoreCommandLineMacros
+    value: true
+
+  - key: cppcoreguidelines-narrowing-conversions.WarnOnIntegerNarrowingConversion
+    value: true
+  - key: cppcoreguidelines-narrowing-conversions.WarnOnIntegerToFloatingPointNarrowingConversion
+    value: true
+  - key: cppcoreguidelines-narrowing-conversions.WarnOnFloatingPointNarrowingConversion
+    value: true
+  - key: cppcoreguidelines-narrowing-conversions.WarnWithinTemplateInstantiation
+    value: true
+  - key: cppcoreguidelines-narrowing-conversions.WarnOnEquivalentBitWidth
+    value: true
+  - key: cppcoreguidelines-narrowing-conversions.IgnoreConversionFromTypes
+    value: ""
+  - key: cppcoreguidelines-narrowing-conversions.PedanticMode
+    value: true
+
+# - key: cppcoreguidelines-no-malloc.Allocations // Default
+# - key: cppcoreguidelines-no-malloc.Deallocations // Default
+# - key: cppcoreguidelines-no-malloc.Reallocations // Default
+
+# - key: cppcoreguidelines-owning-memory.LegacyResourceProducers // Default
+# - key: cppcoreguidelines-owning-memory.LegacyResourceConsumers // Default
+
+# - key: cppcoreguidelines-pro-bounds-constant-array-index.GslHeader // Default
+  - key: cppcoreguidelines-pro-bounds-constant-array-index.IncludeStyle
+    value: "llvm"
+
+  - key: cppcoreguidelines-pro-type-const-cast.StrictMode
+    value: true
+
+  - key: cppcoreguidelines-pro-type-member-init.IgnoreArrays
+    value: false
+  - key: cppcoreguidelines-pro-type-member-init.UseAssignment
+    value: false
+
+  - key: cppcoreguidelines-pro-type-static-cast-downcast.StrictMode
+    value: true
+
+  - key: cppcoreguidelines-rvalue-reference-param-not-moved.AllowPartialMove
+    value: false
+  - key: cppcoreguidelines-rvalue-reference-param-not-moved.IgnoreUnnamedParams
+    value: false
+  - key: cppcoreguidelines-rvalue-reference-param-not-moved.IgnoreNonDeducedTemplateTypes
+    value: false
+
+  - key: cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor
+    value: false
+  - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions
+    value: false
+  - key: cppcoreguidelines-special-member-functions.AllowMissingMoveFunctionsWhenCopyIsDeleted
+    value: false
+
+# - key: google-runtime-int.UnsignedTypePrefix // Default
+# - key: google-runtime-int.SignedTypePrefix // Default
+# - key: google-runtime-int.TypeSuffix // Default
+
+  - key: hicpp-ignored-remove-result.AllowCastToVoid
+    value: false
+
+  - key: hicpp-multiway-paths-covered.WarnOnMissingElse
+    value: false
+
+  - key: hicpp-signed-bitwise.IgnorePositiveIntegerLiterals
+    value: false
+
+  - key: misc-const-correctness.AnalyzeValues
+    value: true
+  - key: misc-const-correctness.AnalyzeReferences
+    value: true
+  - key: misc-const-correctness.WarnPointersAsValues
+    value: true
+  - key: misc-const-correctness.TransformValues
+    value: true
+  - key: misc-const-correctness.TransformReferences
+    value: true
+  - key: misc-const-correctness.TransformPointersAsValues
+    value: true
+
+# - key: misc-coroutine-hostile-raii.RAIITypesList // Default
+# - key: misc-coroutine-hostile-raii.AllowedAwaitablesList // Default
+
+  - key: misc-header-include-cycle.IgnoredFilesList
+    value: ""
+
+  - key: misc-include-cleaner.IgnoreHeaders
+    value: "pch.hpp;"
+  - key: misc-include-cleaner.DeduplicateFindings
+    value: true
+
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: false
+  - key: misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables
+    value: false
+
+  - key: misc-throw-by-value-catch-by-reference.CheckThrowTemporaries
+    value: true
+  - key: misc-throw-by-value-catch-by-reference.WarnOnLargeObject
+    value: true
+# - key: misc-throw-by-value-catch-by-reference.MaxSize // Default
+
+  - key: misc-uniqueptr-reset-release.IncludeStyle
+    value: "llvm"
+
+  - key: misc-unused-parameters.StrictMode
+    value: true
+  - key: misc-unused-parameters.IgnoreVirtual
+    value: false
+
+  - key: modernize-avoid-bind.PermissiveParameterList
+    value: false
+
+  - key: modernize-avoid-c-arrays.AllowStringArrays
+    value: false
+
+  - key: modernize-deprecated-headers.CheckHeaderFile
+    value: true
+
+  - key: modernize-loop-convert.MinConfidence
+    value: "reasonable"
+  - key: modernize-loop-convert.UseCxx20ReverseRanges
+    value: true
+  - key: modernize-loop-convert.MakeReverseRangeFunction
+    value: ""
+  - key: modernize-loop-convert.MakeReverseRangeHeader
+    value: ""
+  - key: modernize-loop-convert.IncludeStyle
+    value: "llvm"
+
+# - key: modernize-make-shared.MakeSmartPtrFunction // Default
+# - key: modernize-make-shared.MakeSmartPtrFunctionHeader // Default
+  - key: modernize-make-shared.IncludeStyle
+    value: "llvm"
+  - key: modernize-make-shared.IgnoreMacros
+    value: false
+  - key: modernize-make-shared.IgnoreDefaultInitialization
+    value: false
+
+# - key: modernize-make-unique.MakeSmartPtrFunction // Default
+# - key: modernize-make-unique.MakeSmartPtrFunctionHeader // Default
+  - key: modernize-make-unique.IncludeStyle
+    value: "llvm"
+  - key: modernize-make-unique.IgnoreMacros
+    value: false
+  - key: modernize-make-unique.IgnoreDefaultInitialization
+    value: false
+
+  - key: modernize-min-max-use-initializer-list.IncludeStyle
+    value: "llvm"
+  - key: modernize-min-max-use-initializer-list.IgnoreNonTrivialTypes
+    value: false
+  - key: modernize-min-max-use-initializer-list.IgnoreTrivialTypesOfSizeAbove
+    value: 0
+
+  - key: modernize-pass-by-value.IncludeStyle
+    value: "llvm"
+  - key: modernize-pass-by-value.ValuesOnly
+    value: false
+
+# - key: modernize-raw-string-literal.DelimiterStem // Default
+  - key: modernize-raw-string-literal.ReplaceShorterLiterals
+    value: true
+
+  - key: modernize-replace-auto-ptr.IncludeStyle
+    value: "llvm"
+
+# - key: modernize-replace-disallow-copy-and-assign-macro.MacroName // Default
+
+  - key: modernize-type-traits.IgnoreMacros
+    value: false
+
+  - key: modernize-use-auto.MinTypeNameLength
+    value: 0
+  - key: modernize-use-auto.RemoveStars
+    value: false
+
+  - key: modernize-use-bool-literals.IgnoreMacros
+    value: false
+
+  - key: modernize-use-default-member-init.UseAssignment
+    value: false
+  - key: modernize-use-default-member-init.IgnoreMacros
+    value: false
+
+  - key: modernize-use-designated-initializers.IgnoreMacros
+    value: false
+  - key: modernize-use-designated-initializers.IgnoreSingleElementAggregates
+    value: false
+  - key: modernize-use-designated-initializers.RestrictToPODTypes
+    value: false
+
+# - key: modernize-use-emplace.ContainersWithPushBack // Default
+# - key: modernize-use-emplace.ContainersWithPush // Default
+# - key: modernize-use-emplace.ContainersWithPushFront // Default
+  - key: modernize-use-emplace.IgnoreImplicitConstructors
+    value: false
+# - key: modernize-use-emplace.SmartPointers // Default
+# - key: modernize-use-emplace.TupleTypes // Default
+# - key: modernize-use-emplace.TupleMakeFunctions // Default
+# - key: modernize-use-emplace.EmplacyFunctions // Default
+
+  - key: modernize-use-equals-default.IgnoreMacros
+    value: false
+
+  - key: modernize-use-equals-delete.IgnoreMacros
+    value: false
+
+# - key: modernize-use-nodiscard.ReplacementString // Default
+
+# - key: modernize-use-noexcept.ReplacementString // Default
+  - key: modernize-use-noexcept.UseNoexceptFalse
+    value: true
+
+# - key: modernize-use-nullptr.IgnoredTypes // Default
+# - key: modernize-use-nullptr.NullMacros // Default
+
+  - key: modernize-use-override.IgnoreDestructors
+    value: false
+  - key: modernize-use-override.IgnoreTemplateInstantiations
+    value: false
+  - key: modernize-use-override.AllowOverrideAndFinal
+    value: false
+# - key: modernize-use-override.OverrideSpelling // Default
+# - key: modernize-use-override.FinalSpelling // Default
+
+  - key: modernize-use-std-numbers.DiffThreshold
+    value: 0.001
+  - key: modernize-use-std-numbers.IncludeStyle
+    value: "llvm"
+
+  - key: modernize-use-std-print.StrictMode
+    value: true
+# - key: modernize-use-std-print.PrintfLikeFunctions // Default
+# - key: modernize-use-std-print.ReplacementPrintFunction // Default
+# - key: modernize-use-std-print.ReplacementPrintlnFunction // Default
+# - key: modernize-use-std-print.PrintHeader // Default
+
+  - key: modernize-use-transparent-functors.SafeMode
+    value: false
+
+  - key: modernize-use-using.IgnoreMacros
+    value: false
+  - key: modernize-use-using.IgnoreExternC
+    value: false
+
+  - key: performance-enum-size.EnumIgnoreList
+    value: ""
+
+# - key: performance-faster-string-find.StringLikeClasses // Default
+
+  - key: performance-for-range-copy.WarnOnAllAutoCopies
+    value: true
+  - key: performance-for-range-copy.AllowedTypes
+    value: ""
+
+  - key: performance-inefficient-string-concatenation.StrictMode
+    value: true
+
+# - key: performance-inefficient-vector-operation.VectorLikeClasses // Default
+  - key: performance-inefficient-vector-operation.EnableProto
+    value: true
+
+  - key: performance-move-const-arg.CheckTriviallyCopyableMove
+    value: true
+  - key: performance-move-const-arg.CheckMoveToConstRef
+    value: true
+
+  - key: performance-unnecessary-copy-initialization.AllowedTypes
+    value: ""
+  - key: performance-unnecessary-copy-initialization.ExcludedContainerTypes
+    value: ""
+
+  - key: performance-unnecessary-value-param.IncludeStyle
+    value: "llvm"
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: ""
+
+  - key: portability-restrict-system-includes.Includes
+    value: "*"
+
+  - key: portability-simd-intrinsics.Suggest
+    value: true
+# - key: portability-simd-intrinsics.Std // Default
+
+  - key: readability-avoid-const-params-in-decls.IgnoreMacros
+    value: false
+
+  - key: readability-avoid-return-with-void-value.IgnoreMacros
+    value: false
+  - key: readability-avoid-return-with-void-value.StrictMode
+    value: true
+
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: 0
+
+  - key: readability-const-return-type.IgnoreMacros
+    value: false
+
+  - key: readability-container-data-pointer.IgnoredContainers
+    value: ""
+
+# - key: readability-container-size-empty.ExcludedComparisonTypes // Default
+
+  - key: readability-else-after-return.WarnOnUnfixable
+    value: true
+  - key: readability-else-after-return.WarnOnConditionVariables
+    value: true
+
+  - key: readability-function-cognitive-complexity.Threshold
+    value: 25
+  - key: readability-function-cognitive-complexity.DescribeBasicIncrements
+    value: true
+  - key: readability-function-cognitive-complexity.IgnoreMacros
+    value: false
+
+  - key: readability-function-size.LineThreshold
+    value: 200
+  - key: readability-function-size.StatementThreshold
+    value: 800
+  - key: readability-function-size.BranchThreshold
+    value: 20
+  - key: readability-function-size.ParameterThreshold
+    value: 8
+  - key: readability-function-size.NestingThreshold
+    value: 5
+  - key: readability-function-size.VariableThreshold
+    value: 20
+
+  - key: readability-identifier-length.MinimumVariableNameLength
+    value: 2
+  - key: readability-identifier-length.IgnoredVariableNames
+    value: "[xyz]"
+  - key: readability-identifier-length.MinimumParameterNameLength
+    value: 2
+  - key: readability-identifier-length.IgnoredParameterNames
+    value: "[xyz]"
+  - key: readability-identifier-length.MinimumLoopCounterNameLength
+    value: 2
+  - key: readability-identifier-length.IgnoredLoopCounterNames
+    value: "[xyz]"
+  - key: readability-identifier-length.MinimumExceptionNameLength
+    value: 2
+  - key: readability-identifier-length.IgnoredExceptionVariableNames
+    value: ""
+
+# Abstract Class Naming
+  - key: readability-identifier-naming.AbstractClassCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.AbstractClassPrefix
+    value: ""
+# - key: readability-identifier-naming.AbstractClassIgnoredRegexp // None
+  - key: readability-identifier-naming.AbstractClassSuffix
+    value: ""
+  - key: readability-identifier-naming.AbstractClassHungarianPrefix
+    value: "Off"
+# -
+  - key: readability-identifier-naming.AggressiveDependentMemberLookup
+    value: true
+# -
+  - key: readability-identifier-naming.CheckAnonFieldInParent
+    value: true
+# -
+# Class Naming
+  - key: readability-identifier-naming.ClassCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.ClassPrefix
+    value: ""
+# - key: readability-identifier-naming.ClassIgnoredRegexp // None
+  - key: readability-identifier-naming.ClassSuffix
+    value: ""
+  - key: readability-identifier-naming.ClassHungarianPrefix
+    value: "Off"
+# -
+# Class Constant Naming (Static)
+  - key: readability-identifier-naming.ClassConstantCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ClassConstantPrefix
+    value: "s_"
+# - key: readability-identifier-naming.ClassConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.ClassConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.ClassConstantHungarianPrefix
+    value: "Off"
+# -
+# Class Member Naming (Static)
+  - key: readability-identifier-naming.ClassMemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ClassMemberPrefix
+    value: "s_"
+# - key: readability-identifier-naming.ClassMemberIgnoredRegexp // None
+  - key: readability-identifier-naming.ClassMemberSuffix
+    value: ""
+  - key: readability-identifier-naming.ClassMemberHungarianPrefix
+    value: "Off"
+# -
+# Class Method Naming
+  - key: readability-identifier-naming.ClassMethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ClassMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.ClassMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.ClassMethodSuffix
+    value: ""
+# -
+# Concept Naming
+  - key: readability-identifier-naming.ConceptCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.ConceptPrefix
+    value: ""
+# - key: readability-identifier-naming.ConceptIgnoredRegexp // None
+  - key: readability-identifier-naming.ConceptSuffix
+    value: ""
+# -
+# Constant Naming
+  - key: readability-identifier-naming.ConstantCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ConstantPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.ConstantHungarianPrefix
+    value: "Off"
+# -
+# Constant Member Naming
+  - key: readability-identifier-naming.ConstantMemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ConstantMemberPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstantMemberIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstantMemberSuffix
+    value: ""
+  - key: readability-identifier-naming.ConstantMemberHungarianPrefix
+    value: "Off"
+# -
+# Constant Parameter Naming
+  - key: readability-identifier-naming.ConstantParameterCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ConstantParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstantParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstantParameterSuffix
+    value: ""
+  - key: readability-identifier-naming.ConstantParameterHungarianPrefix
+    value: "Off"
+# -
+# Constant Pointer Parameter Naming
+  - key: readability-identifier-naming.ConstantPointerParameterCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ConstantPointerParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstantPointerParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstantPointerParameterSuffix
+    value: ""
+  - key: readability-identifier-naming.ConstantPointerParameterHungarianPrefix
+    value: "Off"
+# -
+# Constexpr Function Naming
+  - key: readability-identifier-naming.ConstexprFunctionCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.ConstexprFunctionPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstexprFunctionIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstexprFunctionSuffix
+    value: ""
+# -
+# Class Constexpr Method Naming
+  - key: readability-identifier-naming.ConstexprMethodCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.ConstexprMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.ConstexprMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstexprMethodSuffix
+    value: ""
+# -
+# Constexpr Variable Naming
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.ConstexprVariablePrefix
+    value: ""
+# - key: readability-identifier-naming.ConstexprVariableIgnoredRegexp // None
+  - key: readability-identifier-naming.ConstexprVariableSuffix
+    value: ""
+  - key: readability-identifier-naming.ConstexprVariableHungarianPrefix
+    value: "Off"
+# -
+# Enum Naming
+  - key: readability-identifier-naming.EnumCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.EnumPrefix
+    value: ""
+# - key: readability-identifier-naming.EnumIgnoredRegexp // None
+  - key: readability-identifier-naming.EnumSuffix
+    value: ""
+# -
+# Enum Constant Naming
+  - key: readability-identifier-naming.EnumConstantCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.EnumConstantPrefix
+    value: ""
+# - key: readability-identifier-naming.EnumConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.EnumConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.EnumConstantHungarianPrefix
+    value: "Off"
+# -
+# Function Naming
+  - key: readability-identifier-naming.FunctionCase
+    value: "camelBack"
+  - key: readability-identifier-naming.FunctionPrefix
+    value: ""
+# - key: readability-identifier-naming.FunctionIgnoredRegexp // None
+  - key: readability-identifier-naming.FunctionSuffix
+    value: ""
+# -
+  - key: readability-identifier-naming.GetConfigPerFile
+    value: true
+# -
+# Global Constant Naming
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: "camelBack"
+  - key: readability-identifier-naming.GlobalConstantPrefix
+    value: "g_"
+# - key: readability-identifier-naming.GlobalConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.GlobalConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.GlobalConstantHungarianPrefix
+    value: "Off"
+# -
+# Global Constant Pointer Naming
+  - key: readability-identifier-naming.GlobalConstantPointerCase
+    value: "camelBack"
+  - key: readability-identifier-naming.GlobalConstantPointerPrefix
+    value: "g_"
+# - key: readability-identifier-naming.GlobalConstantPointerIgnoredRegexp // None
+  - key: readability-identifier-naming.GlobalConstantPointerSuffix
+    value: ""
+  - key: readability-identifier-naming.GlobalConstantPointerHungarianPrefix
+    value: "Off"
+# -
+# Global Function Naming
+  - key: readability-identifier-naming.GlobalFunctionCase
+    value: "camelBack"
+  - key: readability-identifier-naming.GlobalFunctionPrefix
+    value: ""
+  - key: readability-identifier-naming.GlobalFunctionIgnoredRegexp
+    value: "WinMain"
+  - key: readability-identifier-naming.GlobalFunctionSuffix
+    value: ""
+# -
+# Global Pointer Naming
+  - key: readability-identifier-naming.GlobalPointerCase
+    value: "camelBack"
+  - key: readability-identifier-naming.GlobalPointerPrefix
+    value: "g_"
+# - key: readability-identifier-naming.GlobalPointerIgnoredRegexp // None
+  - key: readability-identifier-naming.GlobalPointerSuffix
+    value: ""
+  - key: readability-identifier-naming.GlobalPointerHungarianPrefix
+    value: "Off"
+# -
+# Global Variable Naming
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: "camelBack"
+  - key: readability-identifier-naming.GlobalVariablePrefix
+    value: "g_"
+# - key: readability-identifier-naming.GlobalVariableIgnoredRegexp // None
+  - key: readability-identifier-naming.GlobalVariableSuffix
+    value: ""
+  - key: readability-identifier-naming.GlobalVariableHungarianPrefix
+    value: "Off"
+# -
+  - key: readability-identifier-naming.IgnoreMainLikeFunctions
+    value: false
+# -
+# Inline Namespace Naming
+  - key: readability-identifier-naming.InlineNamespaceCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.InlineNamespacePrefix
+    value: ""
+# - key: readability-identifier-naming.InlineNamespaceIgnoredRegexp // None
+  - key: readability-identifier-naming.InlineNamespaceSuffix
+    value: ""
+# -
+# Local Constant Naming
+  - key: readability-identifier-naming.LocalConstantCase
+    value: "camelBack"
+  - key: readability-identifier-naming.LocalConstantPrefix
+    value: ""
+# - key: readability-identifier-naming.LocalConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.LocalConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.LocalConstantHungarianPrefix
+    value: "Off"
+# -
+# Local Constant Pointer Naming
+  - key: readability-identifier-naming.LocalConstantPointerCase
+    value: "camelBack"
+  - key: readability-identifier-naming.LocalConstantPointerPrefix
+    value: ""
+# - key: readability-identifier-naming.LocalConstantPointerIgnoredRegexp // None
+  - key: readability-identifier-naming.LocalConstantPointerSuffix
+    value: ""
+  - key: readability-identifier-naming.LocalConstantPointerHungarianPrefix
+    value: "Off"
+# -
+# Local Pointer Naming
+  - key: readability-identifier-naming.LocalPointerCase
+    value: "camelBack"
+  - key: readability-identifier-naming.LocalPointerPrefix
+    value: ""
+# - key: readability-identifier-naming.LocalPointerIgnoredRegexp // None
+  - key: readability-identifier-naming.LocalPointerSuffix
+    value: ""
+  - key: readability-identifier-naming.LocalPointerHungarianPrefix
+    value: "Off"
+# -
+# Local Variable Naming
+  - key: readability-identifier-naming.LocalVariableCase
+    value: "camelBack"
+  - key: readability-identifier-naming.LocalVariablePrefix
+    value: ""
+# - key: readability-identifier-naming.LocalVariableIgnoredRegexp // None
+  - key: readability-identifier-naming.LocalVariableSuffix
+    value: ""
+  - key: readability-identifier-naming.LocalVariableHungarianPrefix
+    value: "Off"
+# -
+# Macro Definition Naming
+  - key: readability-identifier-naming.MacroCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.MacroPrefix
+    value: ""
+# - key: readability-identifier-naming.MacroIgnoredRegexp // None
+  - key: readability-identifier-naming.MacroSuffix
+    value: ""
+# -
+# Member Naming
+  - key: readability-identifier-naming.MemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.MemberPrefix
+    value: ""
+# - key: readability-identifier-naming.MemberIgnoredRegexp // None
+  - key: readability-identifier-naming.MemberSuffix
+    value: ""
+  - key: readability-identifier-naming.MemberHungarianPrefix
+    value: "Off"
+# -
+# Method Naming
+  - key: readability-identifier-naming.MethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.MethodPrefix
+    value: ""
+# - key: readability-identifier-naming.MethodIgnoredRegexp // None
+  - key: readability-identifier-naming.MethodSuffix
+    value: ""
+# -
+# Namespace Naming
+  - key: readability-identifier-naming.NamespaceCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.NamespacePrefix
+    value: ""
+# - key: readability-identifier-naming.NamespaceIgnoredRegexp // None
+  - key: readability-identifier-naming.NamespaceSuffix
+    value: ""
+# -
+# Parameter Naming
+  - key: readability-identifier-naming.ParameterCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.ParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.ParameterSuffix
+    value: ""
+  - key: readability-identifier-naming.ParameterHungarianPrefix
+    value: "Off"
+# -
+# Parameter Pack Naming
+  - key: readability-identifier-naming.ParameterPackCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ParameterPackPrefix
+    value: ""
+# - key: readability-identifier-naming.ParameterPackIgnoredRegexp // None
+  - key: readability-identifier-naming.ParameterPackSuffix
+    value: ""
+# -
+# Pointer Parameter Naming
+  - key: readability-identifier-naming.PointerParameterCase
+    value: "camelBack"
+  - key: readability-identifier-naming.PointerParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.PointerParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.PointerParameterSuffix
+    value: ""
+  - key: readability-identifier-naming.PointerParameterHungarianPrefix
+    value: "Off"
+# -
+# Private Member Naming
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: "m_"
+# - key: readability-identifier-naming.PrivateMemberIgnoredRegexp // None
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: ""
+  - key: readability-identifier-naming.PrivateMemberHungarianPrefix
+    value: "Off"
+# -
+# Private Method Naming
+  - key: readability-identifier-naming.PrivateMethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.PrivateMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.PrivateMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.PrivateMethodSuffix
+    value: ""
+# -
+# Protected Member Naming
+  - key: readability-identifier-naming.ProtectedMemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ProtectedMemberPrefix
+    value: ""
+# - key: readability-identifier-naming.ProtectedMemberIgnoredRegexp // None
+  - key: readability-identifier-naming.ProtectedMemberSuffix
+    value: ""
+  - key: readability-identifier-naming.ProtectedMemberHungarianPrefix
+    value: "Off"
+# -
+# Protected Method Naming
+  - key: readability-identifier-naming.ProtectedMethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ProtectedMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.ProtectedMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.ProtectedMethodSuffix
+    value: ""
+# -
+# Public Member Naming
+  - key: readability-identifier-naming.PublicMemberCase
+    value: "camelBack"
+  - key: readability-identifier-naming.PublicMemberPrefix
+    value: ""
+# - key: readability-identifier-naming.PublicMemberIgnoredRegexp // None
+  - key: readability-identifier-naming.PublicMemberSuffix
+    value: ""
+  - key: readability-identifier-naming.PublicMemberHungarianPrefix
+    value: "Off"
+# -
+# Public Method Naming
+  - key: readability-identifier-naming.PublicMethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.PublicMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.PublicMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.PublicMethodSuffix
+    value: ""
+# -
+# Scoped Enum Constant Naming
+  - key: readability-identifier-naming.ScopedEnumConstantCase
+    value: "UPPER_CASE"
+  - key: readability-identifier-naming.ScopedEnumConstantPrefix
+    value: ""
+# - key: readability-identifier-naming.ScopedEnumConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.ScopedEnumConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.ScopedEnumConstantHungarianPrefix
+    value: "Off"
+# -
+# Static Constant Naming
+  - key: readability-identifier-naming.StaticConstantCase
+    value: "camelBack"
+  - key: readability-identifier-naming.StaticConstantPrefix
+    value: "s_"
+# - key: readability-identifier-naming.StaticConstantIgnoredRegexp // None
+  - key: readability-identifier-naming.StaticConstantSuffix
+    value: ""
+  - key: readability-identifier-naming.StaticConstantHungarianPrefix
+    value: "Off"
+# -
+# Static Variable Naming
+  - key: readability-identifier-naming.StaticVariableCase
+    value: "camelBack"
+  - key: readability-identifier-naming.StaticVariablePrefix
+    value: "s_"
+# - key: readability-identifier-naming.StaticVariableIgnoredRegexp // None
+  - key: readability-identifier-naming.StaticVariableSuffix
+    value: ""
+  - key: readability-identifier-naming.StaticVariableHungarianPrefix
+    value: "Off"
+# -
+# Struct Naming
+  - key: readability-identifier-naming.StructCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.StructPrefix
+    value: ""
+# - key: readability-identifier-naming.StructIgnoredRegexp // None
+  - key: readability-identifier-naming.StructSuffix
+    value: ""
+# -
+# Template Parameter Naming
+  - key: readability-identifier-naming.TemplateParameterCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.TemplateParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.TemplateParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.TemplateParameterSuffix
+    value: ""
+# -
+# Template Template Parameter Naming
+  - key: readability-identifier-naming.TemplateTemplateParameterCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.TemplateTemplateParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.TemplateTemplateParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.TemplateTemplateParameterSuffix
+    value: ""
+# -
+# Type Alias Naming
+  - key: readability-identifier-naming.TypeAliasCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.TypeAliasPrefix
+    value: ""
+# - key: readability-identifier-naming.TypeAliasIgnoredRegexp // None
+  - key: readability-identifier-naming.TypeAliasSuffix
+    value: ""
+# -
+# Typedef Naming
+  - key: readability-identifier-naming.TypedefCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.TypedefPrefix
+    value: ""
+# - key: readability-identifier-naming.TypedefIgnoredRegexp // None
+  - key: readability-identifier-naming.TypedefSuffix
+    value: ""
+# -
+# Type Template Parameter Naming
+  - key: readability-identifier-naming.TypeTemplateParameterCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.TypeTemplateParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.TypeTemplateParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.TypeTemplateParameterSuffix
+    value: ""
+# -
+# Union Naming
+  - key: readability-identifier-naming.UnionCase
+    value: "CamelCase"
+  - key: readability-identifier-naming.UnionPrefix
+    value: ""
+# - key: readability-identifier-naming.UnionIgnoredRegexp // None
+  - key: readability-identifier-naming.UnionSuffix
+    value: ""
+# -
+# Value Template Parameter Naming
+  - key: readability-identifier-naming.ValueTemplateParameterCase
+    value: "camelBack"
+  - key: readability-identifier-naming.ValueTemplateParameterPrefix
+    value: ""
+# - key: readability-identifier-naming.ValueTemplateParameterIgnoredRegexp // None
+  - key: readability-identifier-naming.ValueTemplateParameterSuffix
+    value: ""
+# -
+# Variable Naming
+  - key: readability-identifier-naming.VariableCase
+    value: "camelBack"
+  - key: readability-identifier-naming.VariablePrefix
+    value: ""
+# - key: readability-identifier-naming.VariableIgnoredRegexp // None
+  - key: readability-identifier-naming.VariableSuffix
+    value: ""
+  - key: readability-identifier-naming.VariableHungarianPrefix
+    value: "Off"
+# -
+# Virtual Method Naming
+  - key: readability-identifier-naming.VirtualMethodCase
+    value: "camelBack"
+  - key: readability-identifier-naming.VirtualMethodPrefix
+    value: ""
+# - key: readability-identifier-naming.VirtualMethodIgnoredRegexp // None
+  - key: readability-identifier-naming.VirtualMethodSuffix
+    value: ""
+# -
+# - key: readability-identifier-naming.HungarianNotation.General.* // Default
+# - key: readability-identifier-naming.HungarianNotation.General.TreatStructAsClass // Default
+# - key: readability-identifier-naming.HungarianNotation.CString.* // Default
+# - key: readability-identifier-naming.HungarianNotation.CString.CharPointer // Default
+# - key: readability-identifier-naming.HungarianNotation.CString.CharArray // Default
+# - key: readability-identifier-naming.HungarianNotation.CString.WideCharPointer // Default
+# - key: readability-identifier-naming.HungarianNotation.CString.WideCharArray // Default
+# - key: readability-identifier-naming.HungarianNotation.DerivedType.* // Default
+# - key: readability-identifier-naming.HungarianNotation.DerivedType.Array // Default
+# - key: readability-identifier-naming.HungarianNotation.DerivedType.Pointer // Default
+# - key: readability-identifier-naming.HungarianNotation.DerivedType.FunctionPointer // Default
+# - key: readability-identifier-naming.HungarianNotation.PrimitiveType.* // Default
+# - key: readability-identifier-naming.HungarianNotation.UserDefinedType.* // Default
+
+  - key: readability-implicit-bool-conversion.AllowIntegerConditions
+    value: false
+  - key: readability-implicit-bool-conversion.AllowPointerConditions
+    value: false
+
+  - key: readability-inconsistent-declaration-parameter-name.IgnoreMacros
+    value: false
+  - key: readability-inconsistent-declaration-parameter-name.Strict
+    value: true
+
+  - key: readability-magic-numbers.IgnoredIntegerValues
+    value: "1;2;100"
+  - key: readability-magic-numbers.IgnorePowersOf2IntegerValues
+    value: false
+  - key: readability-magic-numbers.IgnoredFloatingPointValues
+    value: "1.0;2.0;100.0"
+  - key: readability-magic-numbers.IgnoreAllFloatingPointValues
+    value: false
+  - key: readability-magic-numbers.IgnoreBitFieldsWidths
+    value: false
+  - key: readability-magic-numbers.IgnoreTypeAliases
+    value: false
+  - key: readability-magic-numbers.IgnoreUserDefinedLiterals
+    value: false
+
+  - key: readability-operators-representation.BinaryOperators
+    value: "and;and_eq;bitand;bitor;compl;not;!=;or;or_eq;xor;xor_eq"
+  - key: readability-operators-representation.OverloadedOperators
+    value: ""
+
+  - key: readability-qualified-auto.AddConstToQualified
+    value: true
+
+  - key: readability-redundant-access-specifiers.CheckFirstDeclaration
+    value: false
+
+  - key: readability-redundant-casting.IgnoreMacros
+    value: false
+  - key: readability-redundant-casting.IgnoreTypeAliases
+    value: false
+
+  - key: readability-redundant-declaration.IgnoreMacros
+    value: false
+
+  - key: readability-redundant-inline-specifier.StrictMode
+    value: true
+
+  - key: readability-redundant-member-init.IgnoreBaseInCopyConstructors
+    value: false
+
+  - key: readability-redundant-smartptr-get.IgnoreMacros
+    value: false
+
+# - key: readability-redundant-string-cstr.StringParameterFunctions // Default
+
+# - key: readability-redundant-string-init.StringNames // Default
+
+  - key: readability-simplify-boolean-expr.IgnoreMacros
+    value: false
+  - key: readability-simplify-boolean-expr.ChainedConditionalReturn
+    value: true
+  - key: readability-simplify-boolean-expr.ChainedConditionalAssignment
+    value: true
+  - key: readability-simplify-boolean-expr.SimplifyDeMorgan
+    value: true
+  - key: readability-simplify-boolean-expr.SimplifyDeMorganRelaxed
+    value: true
+
+# - key: readability-simplify-subscript-expr.Types // Default
+
+  - key: readability-suspicious-call-argument.MinimumIdentifierNameLength
+    value: 2
+# - key: readability-suspicious-call-argument.Abbreviations // Default
+
+  - key: readability-uniqueptr-delete-release.PreferResetCall
+    value: true
+
+# - key: readability-uppercase-literal-suffix.NewSuffixes // Default
+  - key: readability-uppercase-literal-suffix.IgnoreMacros
+    value: false

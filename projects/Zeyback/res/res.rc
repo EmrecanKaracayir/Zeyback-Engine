@@ -1,0 +1,10 @@
+// NOLINTBEGIN
+
+#include "Game/Resource/resource.hpp"
+
+#include <winres.h>
+
+IDIC_APP ICON "icons/app.ico";
+IDCC_POINTER CURSOR "cursors/pointer.cur";
+
+// NOLINTEND
