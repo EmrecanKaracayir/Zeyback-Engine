@@ -6,6 +6,12 @@
 
 #include <cstdint>
 
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace GDI = Platform::Windows::GDI;
+} // namespace
+
 namespace Engine
 {
   class Engine
@@ -59,7 +65,7 @@ namespace Engine
     auto onHandleMouseInput(int x, int y, Event::Mouse event) const noexcept
       -> void;
     auto onUpdate() noexcept -> void;
-    auto onRender(const Platform::Windows::GDI::DeviceContext& deviceContext
+    auto onRender(const GDI::DeviceContext& deviceContext
     ) const noexcept -> void;
     auto onPause() noexcept -> void;
     auto onStop() const noexcept -> void;
@@ -150,8 +156,8 @@ namespace Engine
     *| [private]: Fields                                                      |*
     \*------------------------------------------------------------------------*/
 
-    State                                 m_state{State::RUNNING};
-    Platform::Windows::GDI::DeviceContext m_deviceContext;
+    State              m_state{State::RUNNING};
+    GDI::DeviceContext m_deviceContext;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Friends                                                     |*

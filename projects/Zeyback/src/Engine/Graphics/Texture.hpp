@@ -1,12 +1,17 @@
 #pragma once
 
 #include "Platform/Windows/GDI/Bitmap.hpp"
+#include "Platform/Windows/GDI/Color.hpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
-
-#include <windef.h>
 
 #include <cstdint>
 #include <string>
+
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace GDI = Platform::Windows::GDI;
+} // namespace
 
 namespace Engine::Graphics
 {
@@ -26,7 +31,10 @@ namespace Engine::Graphics
     Texture() noexcept               = default;
     Texture(const std::wstring& filePath, bool transparency);
     Texture(
-      std::int32_t width, std::int32_t height, COLORREF color, bool transparency
+      std::int32_t      width,
+      std::int32_t      height,
+      const GDI::Color& color,
+      bool              transparency
     );
 
     /*------------------------------------------------------------------------*\
@@ -56,12 +64,13 @@ namespace Engine::Graphics
 
     auto reinitialize(const std::wstring& filePath, bool transparency) -> void;
     auto reinitialize(
-      std::int32_t width, std::int32_t height, COLORREF color, bool transparency
+      std::int32_t      width,
+      std::int32_t      height,
+      const GDI::Color& color,
+      bool              transparency
     ) -> void;
     auto render(
-      const Platform::Windows::GDI::DeviceContext& deviceContext,
-      std::int32_t                                 x,
-      std::int32_t                                 y
+      const GDI::DeviceContext& deviceContext, std::int32_t x, std::int32_t y
     ) const -> void;
 
     /*------------------------------------------------------------------------*\
@@ -73,7 +82,7 @@ namespace Engine::Graphics
     \*------------------------------------------------------------------------*/
 
     [[nodiscard]]
-    auto getBitmap() const noexcept -> const Platform::Windows::GDI::Bitmap&;
+    auto getBitmap() const noexcept -> const GDI::Bitmap&;
     [[nodiscard]]
     auto getWidth() const noexcept -> std::int32_t;
     [[nodiscard]]
@@ -144,16 +153,17 @@ namespace Engine::Graphics
     \*------------------------------------------------------------------------*/
 
     auto initialize(const std::wstring& filePath) -> void;
-    auto initialize(std::int32_t width, std::int32_t height, COLORREF color)
-      -> void;
+    auto initialize(
+      std::int32_t width, std::int32_t height, const GDI::Color& color
+    ) -> void;
     auto cleanup() noexcept -> void;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Fields                                                      |*
     \*------------------------------------------------------------------------*/
 
-    Platform::Windows::GDI::Bitmap m_bitmap;
-    bool                           m_transparency{false};
+    GDI::Bitmap m_bitmap;
+    bool        m_transparency{false};
 
     /*------------------------------------------------------------------------*\
     *| [private]: Friends                                                     |*

@@ -1,6 +1,18 @@
 #pragma once
 
+#include "Engine/Math/Rectangle.tpp"
+#include "Platform/Windows/GDI/Color.hpp"
+#include "Platform/Windows/GDI/DeviceContext.hpp"
+
 #include <windef.h>
+
+#include <cstdint>
+
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace Math = Engine::Math;
+} // namespace
 
 namespace Platform::Windows::GDI
 {
@@ -18,13 +30,13 @@ namespace Platform::Windows::GDI
     Brush(const Brush&) noexcept = delete;
     Brush(Brush&&) noexcept      = delete;
     Brush() noexcept             = default;
-    explicit Brush(COLORREF color);
+    explicit Brush(const Color& color);
 
     /*------------------------------------------------------------------------*\
     *| [public]: Destructor                                                   |*
     \*------------------------------------------------------------------------*/
 
-    ~Brush();
+    ~Brush() noexcept;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Operators                                                    |*
@@ -45,7 +57,11 @@ namespace Platform::Windows::GDI
     *| [public]: Methods                                                      |*
     \*------------------------------------------------------------------------*/
 
-    auto reinitialize(COLORREF color) -> void;
+    auto reinitialize(const Color& color) -> void;
+    auto fillRect(
+      const DeviceContext&                 deviceContext,
+      const Math::Rectangle<std::int32_t>& rectangle
+    ) const -> void;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Fields                                                       |*
@@ -122,7 +138,7 @@ namespace Platform::Windows::GDI
     *| [private]: Methods                                                     |*
     \*------------------------------------------------------------------------*/
 
-    auto initialize(COLORREF color) -> void;
+    auto initialize(const Color& color) -> void;
     auto cleanup() noexcept -> void;
 
     /*------------------------------------------------------------------------*\

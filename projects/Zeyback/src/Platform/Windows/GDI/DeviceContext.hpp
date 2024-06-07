@@ -6,6 +6,12 @@
 
 #include <cstdint>
 
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace Math = Engine::Math;
+} // namespace
+
 namespace Platform::Windows::GDI
 {
   class DeviceContext
@@ -35,7 +41,7 @@ namespace Platform::Windows::GDI
     *| [public]: Destructor                                                   |*
     \*------------------------------------------------------------------------*/
 
-    ~DeviceContext();
+    ~DeviceContext() noexcept;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Operators                                                    |*
@@ -59,10 +65,10 @@ namespace Platform::Windows::GDI
     auto reinitialize(Action action, HDC deviceContext = nullptr) -> void;
     auto selectObject(HGDIOBJ object) const -> void;
     auto transferBits(
-      const DeviceContext&                         source,
-      const Engine::Math::Rectangle<std::int32_t>& sourceArea,
-      const Engine::Math::Rectangle<std::int32_t>& destinationArea,
-      bool                                         transparency
+      const DeviceContext&                 source,
+      const Math::Rectangle<std::int32_t>& sourceArea,
+      const Math::Rectangle<std::int32_t>& destinationArea,
+      bool                                 transparency
     ) const -> void;
 
     /*------------------------------------------------------------------------*\

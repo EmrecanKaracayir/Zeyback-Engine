@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Windows/GDI/DeviceContext.hpp"
+
 #include <windef.h>
 
 #include <cstdint>
@@ -22,13 +24,17 @@ namespace Platform::Windows::GDI
     Bitmap(Bitmap&&) noexcept      = delete;
     Bitmap() noexcept              = default;
     explicit Bitmap(const std::wstring& filePath);
-    Bitmap(HDC deviceContext, std::int32_t width, std::int32_t height);
+    Bitmap(
+      const DeviceContext& deviceContext,
+      std::int32_t         width,
+      std::int32_t         height
+    );
 
     /*------------------------------------------------------------------------*\
     *| [public]: Destructor                                                   |*
     \*------------------------------------------------------------------------*/
 
-    ~Bitmap();
+    ~Bitmap() noexcept;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Operators                                                    |*
@@ -51,7 +57,9 @@ namespace Platform::Windows::GDI
 
     auto reinitialize(const std::wstring& filePath) -> void;
     auto reinitialize(
-      HDC deviceContext, std::int32_t width, std::int32_t height
+      const DeviceContext& deviceContext,
+      std::int32_t         width,
+      std::int32_t         height
     ) -> void;
 
     /*------------------------------------------------------------------------*\
@@ -134,7 +142,7 @@ namespace Platform::Windows::GDI
     \*------------------------------------------------------------------------*/
 
     auto initialize(const std::wstring& filePath) -> void;
-    auto initialize(HDC deviceContext) -> void;
+    auto initialize(const DeviceContext& deviceContext) -> void;
     auto cleanup() noexcept -> void;
 
     /*------------------------------------------------------------------------*\

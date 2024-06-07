@@ -3,6 +3,7 @@
 #include "Platform/Windows/GDI/Bitmap.hpp"
 
 #include "Engine/File/Util/path.hpp"
+#include "Platform/Windows/GDI/DeviceContext.hpp"
 
 #include <minwindef.h>
 #include <windef.h>
@@ -24,7 +25,9 @@ namespace Platform::Windows::GDI
 
   Bitmap::Bitmap(const std::wstring& filePath) { initialize(filePath); }
 
-  Bitmap::Bitmap(HDC deviceContext, std::int32_t width, std::int32_t height)
+  Bitmap::Bitmap(
+    const DeviceContext& deviceContext, std::int32_t width, std::int32_t height
+  )
     : m_width{width}
     , m_height{height}
   {
@@ -35,7 +38,7 @@ namespace Platform::Windows::GDI
   *| [public]: Destructor                                                     |*
   \*--------------------------------------------------------------------------*/
 
-  Bitmap::~Bitmap() { cleanup(); }
+  Bitmap::~Bitmap() noexcept { cleanup(); }
 
   /*--------------------------------------------------------------------------*\
   *| [public]: Methods                                                        |*
@@ -51,7 +54,7 @@ namespace Platform::Windows::GDI
   }
 
   auto Bitmap::reinitialize(
-    HDC deviceContext, std::int32_t width, std::int32_t height
+    const DeviceContext& deviceContext, std::int32_t width, std::int32_t height
   ) -> void
   {
     // Clean instance
@@ -137,12 +140,14 @@ namespace Platform::Windows::GDI
     }
   }
 
-  auto Bitmap::initialize(HDC deviceContext) -> void
+  auto Bitmap::initialize(const DeviceContext& deviceContext) -> void
   {
     try
     {
       // Create a bitmap
-      m_bitmap = {CreateCompatibleBitmap(deviceContext, m_width, m_height)};
+      m_bitmap = {
+        CreateCompatibleBitmap(deviceContext.getHandle(), m_width, m_height)
+      };
 
       // Check if bitmap is valid
       if (m_bitmap == nullptr)

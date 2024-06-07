@@ -2,10 +2,22 @@
 
 #include "Platform/Windows/GDI/Brush.hpp"
 
+#include "Engine/Math/Rectangle.tpp"
+#include "Platform/Windows/GDI/Color.hpp"
+#include "Platform/Windows/GDI/DeviceContext.hpp"
+
 #include <windef.h>
 #include <wingdi.h>
+#include <WinUser.h>
 
+#include <cstdint>
 #include <stdexcept>
+
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace Math = Engine::Math;
+} // namespace
 
 namespace Platform::Windows::GDI
 {
@@ -13,25 +25,42 @@ namespace Platform::Windows::GDI
   *| [public]: Constructors                                                   |*
   \*--------------------------------------------------------------------------*/
 
-  Brush::Brush(COLORREF color) { initialize(color); }
+  Brush::Brush(const Color& color) { initialize(color); }
 
   /*--------------------------------------------------------------------------*\
   *| [public]: Destructor                                                     |*
   \*--------------------------------------------------------------------------*/
 
-  Brush::~Brush() { cleanup(); }
+  Brush::~Brush() noexcept { cleanup(); }
 
   /*--------------------------------------------------------------------------*\
   *| [public]: Methods                                                        |*
   \*--------------------------------------------------------------------------*/
 
-  auto Brush::reinitialize(COLORREF color) -> void
+  auto Brush::reinitialize(const Color& color) -> void
   {
     // Clean instance
     cleanup();
 
     // Initialize brush
     initialize(color);
+  }
+
+  auto Brush::fillRect(
+    const DeviceContext&                 deviceContext,
+    const Math::Rectangle<std::int32_t>& rectangle
+  ) const -> void
+  {
+    // Create WinAPI Rect
+    const RECT rect{
+      rectangle.getLeft(),
+      rectangle.getTop(),
+      rectangle.getRight(),
+      rectangle.getBottom()
+    };
+
+    // Fill rectangle
+    FillRect(deviceContext.getHandle(), &rect, m_brush);
   }
 
   /*--------------------------------------------------------------------------*\
@@ -55,12 +84,12 @@ namespace Platform::Windows::GDI
   *| [private]: Methods                                                       |*
   \*--------------------------------------------------------------------------*/
 
-  auto Brush::initialize(COLORREF color) -> void
+  auto Brush::initialize(const Color& color) -> void
   {
     try
     {
       // Create brush
-      m_brush = {CreateSolidBrush(color)};
+      m_brush = {CreateSolidBrush(color.getReference())};
 
       if (m_brush == nullptr)
       {

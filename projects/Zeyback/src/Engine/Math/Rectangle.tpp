@@ -61,6 +61,14 @@ namespace Engine::Math
     auto getWidth() const noexcept -> T;
     [[nodiscard]]
     auto getHeight() const noexcept -> T;
+    [[nodiscard]]
+    auto getLeft() const noexcept -> T;
+    [[nodiscard]]
+    auto getTop() const noexcept -> T;
+    [[nodiscard]]
+    auto getRight() const noexcept -> T;
+    [[nodiscard]]
+    auto getBottom() const noexcept -> T;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Mutators                                                     |*
@@ -70,6 +78,10 @@ namespace Engine::Math
     auto setY(T y) noexcept -> void;
     auto setWidth(T width) noexcept -> void;
     auto setHeight(T height) noexcept -> void;
+    auto setLeft(T left) noexcept -> void;
+    auto setTop(T top) noexcept -> void;
+    auto setRight(T right) noexcept -> void;
+    auto setBottom(T bottom) noexcept -> void;
 
   protected:
     /*------------------------------------------------------------------------*\
@@ -197,6 +209,34 @@ namespace Engine::Math
     return m_height;
   }
 
+  template <typename T> requires std::is_arithmetic_v<T>
+  [[nodiscard]]
+  auto Rectangle<T>::getLeft() const noexcept -> T
+  {
+    return m_x;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  [[nodiscard]]
+  auto Rectangle<T>::getTop() const noexcept -> T
+  {
+    return m_y;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  [[nodiscard]]
+  auto Rectangle<T>::getRight() const noexcept -> T
+  {
+    return m_x + m_width;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  [[nodiscard]]
+  auto Rectangle<T>::getBottom() const noexcept -> T
+  {
+    return m_y + m_height;
+  }
+
   /*--------------------------------------------------------------------------*\
   *| [public]: Mutators                                                       |*
   \*--------------------------------------------------------------------------*/
@@ -223,5 +263,29 @@ namespace Engine::Math
   auto Rectangle<T>::setHeight(T height) noexcept -> void
   {
     m_height = height;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  auto Rectangle<T>::setLeft(T left) noexcept -> void
+  {
+    m_x = left;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  auto Rectangle<T>::setTop(T top) noexcept -> void
+  {
+    m_y = top;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  auto Rectangle<T>::setRight(T right) noexcept -> void
+  {
+    m_width = right - m_x;
+  }
+
+  template <typename T> requires std::is_arithmetic_v<T>
+  auto Rectangle<T>::setBottom(T bottom) noexcept -> void
+  {
+    m_height = bottom - m_y;
   }
 } // namespace Engine::Math

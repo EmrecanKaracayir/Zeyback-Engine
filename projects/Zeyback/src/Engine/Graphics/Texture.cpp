@@ -5,10 +5,8 @@
 #include "Engine/Math/Rectangle.tpp"
 #include "Platform/Windows/GDI/Bitmap.hpp"
 #include "Platform/Windows/GDI/Brush.hpp"
+#include "Platform/Windows/GDI/Color.hpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
-
-#include <windef.h>
-#include <WinUser.h>
 
 #include <cstdint>
 #include <string>
@@ -33,7 +31,10 @@ namespace Engine::Graphics
   }
 
   Texture::Texture(
-    std::int32_t width, std::int32_t height, COLORREF color, bool transparency
+    std::int32_t      width,
+    std::int32_t      height,
+    const GDI::Color& color,
+    bool              transparency
   )
     : m_transparency{transparency}
   {
@@ -64,7 +65,10 @@ namespace Engine::Graphics
   }
 
   auto Texture::reinitialize(
-    std::int32_t width, std::int32_t height, COLORREF color, bool transparency
+    std::int32_t      width,
+    std::int32_t      height,
+    const GDI::Color& color,
+    bool              transparency
   ) -> void
   {
     // Clean instance
@@ -143,7 +147,7 @@ namespace Engine::Graphics
   }
 
   auto Texture::initialize(
-    std::int32_t width, std::int32_t height, COLORREF color
+    std::int32_t width, std::int32_t height, const GDI::Color& color
   ) -> void
   {
     try
@@ -154,7 +158,7 @@ namespace Engine::Graphics
       };
 
       // Create bitmap
-      m_bitmap.reinitialize(screenDeviceContext.getHandle(), width, height);
+      m_bitmap.reinitialize(screenDeviceContext, width, height);
 
       // Create memory device context
       const GDI::DeviceContext memoryDeviceContext{
@@ -168,8 +172,8 @@ namespace Engine::Graphics
       const GDI::Brush brush{color};
 
       // Fill the bitmap with the brush
-      const RECT rect{0, 0, width, height};
-      FillRect(memoryDeviceContext.getHandle(), &rect, brush.getHandle());
+      const Math::Rectangle<std::int32_t> rectangle{0, 0, width, height};
+      brush.fillRect(memoryDeviceContext, rectangle);
     }
     catch (...)
     {

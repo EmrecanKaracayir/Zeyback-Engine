@@ -1,25 +1,13 @@
 #pragma once
 
-#include "Engine/Engine.hpp"
-#include "Engine/Graphics/Texture.hpp"
-#include "Engine/Input/Mouse.hpp"
-#include "Engine/Math/Vector2.tpp"
-#include "Game/Interface/IGame.hpp"
-#include "Platform/Windows/GDI/Color.hpp"
-#include "Platform/Windows/GDI/DeviceContext.hpp"
+#include <windef.h>
+#include <wingdi.h>
 
-namespace
-{
-  // -------------------------< Namespace Aliases >-------------------------- //
-  namespace Graphics = Engine::Graphics;
-  namespace Input    = Engine::Input;
-  namespace Math     = Engine::Math;
-  namespace GDI      = Platform::Windows::GDI;
-} // namespace
+#include <cstdint>
 
-namespace Game
+namespace Platform::Windows::GDI
 {
-  class Game : public IGame
+  class Color
   {
   public:
     /*------------------------------------------------------------------------*\
@@ -30,21 +18,23 @@ namespace Game
     *| [public]: Constructors                                                 |*
     \*------------------------------------------------------------------------*/
 
-    Game(const Game&) noexcept = delete;
-    Game(Game&&) noexcept      = delete;
+    Color(const Color&) noexcept = delete;
+    Color(Color&&) noexcept      = delete;
+    Color() noexcept             = default;
+    Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue) noexcept;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Destructor                                                   |*
     \*------------------------------------------------------------------------*/
 
-    ~Game() noexcept override;
+    ~Color() noexcept = default;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Operators                                                    |*
     \*------------------------------------------------------------------------*/
 
-    auto operator=(const Game&) noexcept -> Game& = delete;
-    auto operator=(Game&&) noexcept -> Game&      = delete;
+    auto operator=(const Color&) noexcept -> Color& = delete;
+    auto operator=(Color&&) noexcept -> Color&      = delete;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Static methods                                               |*
@@ -58,24 +48,6 @@ namespace Game
     *| [public]: Methods                                                      |*
     \*------------------------------------------------------------------------*/
 
-    [[nodiscard]]
-    auto onCreate() noexcept -> bool final;
-    auto onStart() noexcept -> void final;
-    auto onResume() noexcept -> void final;
-    auto onKeyInput() noexcept -> void final;
-    auto onMouseMove(const Math::Vector2<int>& position) noexcept -> void final;
-    auto onMouseButtonDown(
-      const Math::Vector2<int>& position, Input::Mouse input
-    ) noexcept -> void final;
-    auto onMouseButtonUp(
-      const Math::Vector2<int>& position, Input::Mouse input
-    ) noexcept -> void final;
-    auto onUpdate() noexcept -> void final;
-    auto onRender(const GDI::DeviceContext& deviceContext) -> void final;
-    auto onPause() noexcept -> void final;
-    auto onStop() noexcept -> void final;
-    auto onDestroy() noexcept -> void final;
-
     /*------------------------------------------------------------------------*\
     *| [public]: Fields                                                       |*
     \*------------------------------------------------------------------------*/
@@ -84,9 +56,26 @@ namespace Game
     *| [public]: Accessors                                                    |*
     \*------------------------------------------------------------------------*/
 
+    [[nodiscard]]
+    auto getReference() const noexcept -> COLORREF;
+    [[nodiscard]]
+    auto getRed() const noexcept -> std::uint8_t;
+    [[nodiscard]]
+    auto getGreen() const noexcept -> std::uint8_t;
+    [[nodiscard]]
+    auto getBlue() const noexcept -> std::uint8_t;
+
     /*------------------------------------------------------------------------*\
     *| [public]: Mutators                                                     |*
     \*------------------------------------------------------------------------*/
+
+    auto setReference(
+      std::uint8_t red, std::uint8_t green, std::uint8_t blue
+    ) noexcept -> void;
+    auto setRed(std::uint8_t red) noexcept -> void;
+    auto setGreen(std::uint8_t green) noexcept -> void;
+    auto setBlue(std::uint8_t blue) noexcept -> void;
+
   protected:
     /*------------------------------------------------------------------------*\
     *| [protected]: Types                                                     |*
@@ -128,8 +117,6 @@ namespace Game
     *| [private]: Constructors                                                |*
     \*------------------------------------------------------------------------*/
 
-    Game() noexcept = default;
-
     /*------------------------------------------------------------------------*\
     *| [private]: Destructor                                                  |*
     \*------------------------------------------------------------------------*/
@@ -141,9 +128,6 @@ namespace Game
     /*------------------------------------------------------------------------*\
     *| [private]: Static methods                                              |*
     \*------------------------------------------------------------------------*/
-
-    [[nodiscard]]
-    static auto getInstance() noexcept -> Game&;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Static fields                                               |*
@@ -157,13 +141,10 @@ namespace Game
     *| [private]: Fields                                                      |*
     \*------------------------------------------------------------------------*/
 
-    Graphics::Texture m_loadedTexture;
-    Graphics::Texture m_createdTexture;
+    COLORREF m_color{RGB(255, 0, 0)};
 
     /*------------------------------------------------------------------------*\
     *| [private]: Friends                                                     |*
     \*------------------------------------------------------------------------*/
-
-    friend class Engine::Engine;
   };
-} // namespace Game
+} // namespace Platform::Windows::GDI

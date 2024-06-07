@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <Support/util>
 
+// TODO(EmrecanKaracayir): onRender gets called before onCreate fix it.
+
 namespace
 {
   // -------------------------< Namespace Aliases >-------------------------- //

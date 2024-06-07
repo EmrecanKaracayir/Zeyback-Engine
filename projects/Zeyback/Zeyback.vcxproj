@@ -47,6 +47,7 @@
     <ClInclude Include="src\pch.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\Bitmap.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\Brush.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\Color.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\DeviceContext.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +65,7 @@
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\GDI\Bitmap.cpp" />
     <ClCompile Include="src\Platform\Windows\GDI\Brush.cpp" />
+    <ClCompile Include="src\Platform\Windows\GDI\Color.cpp" />
     <ClCompile Include="src\Platform\Windows\GDI\DeviceContext.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,14 @@
 #include "Engine/Math/Vector2.tpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
 
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace Input = Engine::Input;
+  namespace Math  = Engine::Math;
+  namespace GDI   = Platform::Windows::GDI;
+} // namespace
+
 namespace Game
 {
   class IGame
@@ -46,24 +54,22 @@ namespace Game
     \*------------------------------------------------------------------------*/
 
     [[nodiscard]]
-    virtual auto onCreate() noexcept -> bool   = 0;
-    virtual auto onStart() noexcept -> void    = 0;
-    virtual auto onResume() noexcept -> void   = 0;
-    virtual auto onKeyInput() noexcept -> void = 0;
-    virtual auto onMouseMove(Engine::Math::Vector2<int> position
-    ) noexcept -> void                         = 0;
+    virtual auto onCreate() noexcept -> bool                             = 0;
+    virtual auto onStart() -> void                                       = 0;
+    virtual auto onResume() -> void                                      = 0;
+    virtual auto onKeyInput() -> void                                    = 0;
+    virtual auto onMouseMove(const Math::Vector2<int>& position) -> void = 0;
     virtual auto onMouseButtonDown(
-      Engine::Math::Vector2<int> position, Engine::Input::Mouse input
-    ) noexcept -> void = 0;
+      const Math::Vector2<int>& position, Input::Mouse input
+    ) -> void = 0;
     virtual auto onMouseButtonUp(
-      Engine::Math::Vector2<int> position, Engine::Input::Mouse input
-    ) noexcept -> void                       = 0;
-    virtual auto onUpdate() noexcept -> void = 0;
-    virtual auto onRender(
-      const Platform::Windows::GDI::DeviceContext& deviceContext
-    ) noexcept -> void                      = 0;
-    virtual auto onPause() noexcept -> void = 0;
-    virtual auto onStop() noexcept -> void  = 0;
+      const Math::Vector2<int>& position, Input::Mouse input
+    ) -> void                                                              = 0;
+    virtual auto onUpdate() -> void                                        = 0;
+    virtual auto onRender(const GDI::DeviceContext& deviceContext) -> void = 0;
+    virtual auto onPause() -> void                                         = 0;
+    virtual auto onStop() -> void                                          = 0;
+    virtual auto onDestroy() noexcept -> void                              = 0;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Fields                                                       |*

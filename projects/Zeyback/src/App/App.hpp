@@ -7,7 +7,7 @@
 #include <winnt.h>
 #include <WinUser.h>
 
-// <<<<<<<<<<<<<<<<<<<<<<<<<< Forward Declarations >>>>>>>>>>>>>>>>>>>>>>>>>> //
+// -------------------------< Forward Declarations >------------------------- //
 auto WINAPI
 WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) -> int;
 

@@ -15,8 +15,8 @@
 namespace
 {
   // -------------------------< Namespace Aliases >-------------------------- //
-  namespace Math   = Engine::Math;
   namespace Config = Game::Config;
+  namespace Math   = Engine::Math;
 } // namespace
 
 namespace Platform::Windows::GDI
@@ -35,7 +35,7 @@ namespace Platform::Windows::GDI
   *| [public]: Destructor                                                     |*
   \*--------------------------------------------------------------------------*/
 
-  DeviceContext::~DeviceContext() { cleanup(); }
+  DeviceContext::~DeviceContext() noexcept { cleanup(); }
 
   /*--------------------------------------------------------------------------*\
   *| [public]: Methods                                                        |*

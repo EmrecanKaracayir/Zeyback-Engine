@@ -7,23 +7,24 @@
 #include "Engine/Math/Vector2.tpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
 
-#include <stdexcept>
-
 // NOLINTBEGIN(clang-diagnostic-unused-value)
 
 namespace
 {
   // -------------------------< Namespace Aliases >-------------------------- //
   namespace Input = Engine::Input;
+  namespace Math  = Engine::Math;
   namespace GDI   = Platform::Windows::GDI;
-
-  // -------------------------< Using Declarations >------------------------- //
-  template <typename T> requires std::is_arithmetic_v<T>
-  using Vector2 = Engine::Math::Vector2<T>;
 } // namespace
 
 namespace Game
 {
+  /*--------------------------------------------------------------------------*\
+  *| [public]: Destructor                                                     |*
+  \*--------------------------------------------------------------------------*/
+
+  Game::~Game() noexcept { onDestroy(); }
+
   /*--------------------------------------------------------------------------*\
   *| [public]: Methods                                                        |*
   \*--------------------------------------------------------------------------*/
@@ -31,6 +32,18 @@ namespace Game
   [[nodiscard]]
   auto Game::onCreate() noexcept -> bool
   {
+    try
+    {
+      m_loadedTexture.reinitialize(L"assets\\placeholder.bmp", true);
+
+      // NOLINTNEXTLINE
+      m_createdTexture.reinitialize(64, 64, GDI::Color(255, 0, 0), false);
+    }
+    catch (...)
+    {
+      return false;
+    }
+
     return true;
   }
 
@@ -40,18 +53,22 @@ namespace Game
 
   auto Game::onKeyInput() noexcept -> void {}
 
-  auto Game::onMouseMove(Vector2<int> position) noexcept -> void { position; }
+  auto Game::onMouseMove(const Math::Vector2<int>& position) noexcept -> void
+  {
+    position;
+  }
 
   auto Game::onMouseButtonDown(
-    Vector2<int> position, Input::Mouse input
+    const Math::Vector2<int>& position, Input::Mouse input
   ) noexcept -> void
   {
     position;
     input;
   }
 
-  auto Game::onMouseButtonUp(Vector2<int> position, Input::Mouse input) noexcept
-    -> void
+  auto Game::onMouseButtonUp(
+    const Math::Vector2<int>& position, Input::Mouse input
+  ) noexcept -> void
   {
     position;
     input;
@@ -59,23 +76,18 @@ namespace Game
 
   auto Game::onUpdate() noexcept -> void {}
 
-  auto Game::onRender(const GDI::DeviceContext& deviceContext) noexcept -> void
+  auto Game::onRender(const GDI::DeviceContext& deviceContext) -> void
   {
-    try
-    {
-      tex1.render(deviceContext, 0, 0);
-      // NOLINTNEXTLINE
-      tex2.render(deviceContext, 100, 100);
-    }
-    catch (const std::runtime_error& error)
-    {
-      error;
-    }
+    m_loadedTexture.render(deviceContext, 0, 0);
+    // NOLINTNEXTLINE
+    m_createdTexture.render(deviceContext, 100, 100);
   }
 
   auto Game::onPause() noexcept -> void {}
 
   auto Game::onStop() noexcept -> void {}
+
+  auto Game::onDestroy() noexcept -> void {}
 
   /*--------------------------------------------------------------------------*\
   *| [private]: Static methods                                                |*
@@ -88,6 +100,10 @@ namespace Game
     static Game s_instance;
     return s_instance;
   }
+
+  /*--------------------------------------------------------------------------*\
+  *| [private]: Methods                                                       |*
+  \*--------------------------------------------------------------------------*/
 
 } // namespace Game
 
