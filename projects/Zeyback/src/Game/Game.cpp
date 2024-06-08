@@ -35,9 +35,8 @@ namespace Game
     try
     {
       m_loadedTexture.reinitialize(L"assets\\placeholder.bmp", true);
-
       // NOLINTNEXTLINE
-      m_createdTexture.reinitialize(64, 64, GDI::Color(255, 0, 0), false);
+      m_createdTexture.reinitialize(100, 100, GDI::Color(255, 0, 0), false);
     }
     catch (...)
     {
@@ -80,7 +79,13 @@ namespace Game
   {
     m_loadedTexture.render(deviceContext, 0, 0);
     // NOLINTNEXTLINE
-    m_createdTexture.render(deviceContext, 100, 100);
+    m_loadedTexture.render(deviceContext, 1'552, 0);
+    // NOLINTNEXTLINE
+    m_loadedTexture.render(deviceContext, 0, 852);
+    // NOLINTNEXTLINE
+    m_loadedTexture.render(deviceContext, 1'552, 852);
+    // NOLINTNEXTLINE
+    m_createdTexture.render(deviceContext, 750, 400);
   }
 
   auto Game::onPause() noexcept -> void {}

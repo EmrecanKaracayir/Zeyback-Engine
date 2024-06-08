@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Game/Config/config.hpp"
+
 #include <minwindef.h>
 #include <sal.h>
 #include <windef.h>
@@ -10,6 +12,12 @@
 // -------------------------< Forward Declarations >------------------------- //
 auto WINAPI
 WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) -> int;
+
+namespace
+{
+  // -------------------------< Namespace Aliases >-------------------------- //
+  namespace Config = Game::Config;
+} // namespace
 
 namespace App
 {
@@ -143,9 +151,9 @@ namespace App
 
     [[nodiscard]]
     auto createWindow(const WNDCLASSEX& windowClass) noexcept -> bool;
-    [[nodiscard]]
-    auto changeDisplaySettings(bool custom) noexcept -> bool;
-    auto changeDisplaySettingsEx(bool custom) -> void;
+    auto changeDisplaySettings(bool custom) -> void;
+    auto enterFullscreen() -> void;
+    auto exitFullscreen() -> void;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Fields                                                      |*
@@ -156,6 +164,7 @@ namespace App
     HICON     m_appIcon{};
     HCURSOR   m_pointerCursor{};
     DEVMODE   m_deviceMode{};
+    bool      m_fullscreen{Config::START_FULLSCREEN};
 
     /*------------------------------------------------------------------------*\
     *| [private]: Friends                                                     |*

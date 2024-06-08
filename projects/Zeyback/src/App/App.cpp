@@ -4,7 +4,7 @@
 
 #include "Engine/Engine.hpp"
 #include "Engine/Event/Mouse.hpp"
-#include "Game/Config/Config.hpp"
+#include "Game/Config/config.hpp"
 #include "Game/Resource/resource.hpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
 
@@ -138,10 +138,10 @@ namespace App
       if (wParam != WA_INACTIVE)
       {
         // Fullscreen handling
-        if (Config::FULLSCREEN)
+        if (getInstance().m_fullscreen)
         {
           // Change the display settings
-          getInstance().changeDisplaySettingsEx(true);
+          getInstance().changeDisplaySettings(true);
 
           // Show the window
           ShowWindow(window, SW_SHOW);
@@ -156,10 +156,10 @@ namespace App
         Zeyback::getInstance().onPause();
 
         // Fullscreen handling
-        if (Config::FULLSCREEN)
+        if (getInstance().m_fullscreen)
         {
           // Restore the display settings
-          getInstance().changeDisplaySettingsEx(false);
+          getInstance().changeDisplaySettings(false);
 
           // Minimize the window
           ShowWindow(window, SW_MINIMIZE);
@@ -180,6 +180,16 @@ namespace App
       // End the paint
       EndPaint(window, &paintStruct);
       return 0;
+    }
+    case WM_KEYDOWN:
+    {
+      if (wParam == VK_F11)
+      {
+        getInstance().m_fullscreen
+          ? getInstance().exitFullscreen()
+          : getInstance().enterFullscreen();
+      }
+      break;
     }
     case WM_LBUTTONDOWN:
     {
@@ -227,10 +237,10 @@ namespace App
       Zeyback::getInstance().onStop();
 
       // Fullscreen handling
-      if (Config::FULLSCREEN)
+      if (getInstance().m_fullscreen)
       {
         // Restore the display settings
-        getInstance().changeDisplaySettingsEx(false);
+        getInstance().changeDisplaySettings(false);
       }
 
       // Post a quit message
@@ -305,25 +315,29 @@ namespace App
   {
     // Window variables for fullscreen mode
     std::uint32_t windowStyle{WS_POPUP};
-    std::int32_t  windowWidth{Config::SCREEN_WIDTH};
-    std::int32_t  windowHeight{Config::SCREEN_HEIGHT};
     int           windowX{};
     int           windowY{};
+    std::int32_t  windowWidth{Config::SCREEN_WIDTH};
+    std::int32_t  windowHeight{Config::SCREEN_HEIGHT};
+
+    // Initialize the device mode
+    m_deviceMode.dmSize       = {sizeof(m_deviceMode)};
+    m_deviceMode.dmPelsWidth  = {gsl::narrow_cast<std::uint32_t>(windowWidth)};
+    m_deviceMode.dmPelsHeight = {gsl::narrow_cast<std::uint32_t>(windowHeight)};
+    m_deviceMode.dmBitsPerPel = {Config::PIXEL_DEPTH};
+    m_deviceMode.dmFields     = {
+      DM_PELSWIDTH bitor DM_PELSHEIGHT bitor DM_BITSPERPEL
+    };
 
     // Prepare non-fullscreen window
-    if (not Config::FULLSCREEN)
+    if (not m_fullscreen)
     {
       // Alter window style
       windowStyle = {WS_POPUPWINDOW bitor WS_CAPTION bitor WS_MINIMIZEBOX};
 
       // Adjust the window size
       RECT rect{0, 0, windowWidth, windowHeight};
-      AdjustWindowRectEx(
-        &rect,
-        windowStyle,
-        static_cast<BOOL>(windowClass.lpszMenuName != nullptr),
-        0
-      );
+      AdjustWindowRect(&rect, windowStyle, static_cast<BOOL>(false));
 
       // Calculate and alter the window size
       windowWidth  = {rect.right - rect.left};
@@ -339,18 +353,12 @@ namespace App
     }
     else
     {
-      // Initialize the device mode
-      m_deviceMode.dmSize      = {sizeof(m_deviceMode)};
-      m_deviceMode.dmPelsWidth = {gsl::narrow_cast<std::uint32_t>(windowWidth)};
-      m_deviceMode.dmPelsHeight = {gsl::narrow_cast<std::uint32_t>(windowHeight)
-      };
-      m_deviceMode.dmBitsPerPel = {Config::PIXEL_DEPTH};
-      m_deviceMode.dmFields     = {
-        DM_PELSWIDTH bitor DM_PELSHEIGHT bitor DM_BITSPERPEL
-      };
-
-      // Change the display settings
-      if (not changeDisplaySettings(true))
+      try
+      {
+        // Change display settings for fullscreen
+        changeDisplaySettings(true);
+      }
+      catch (...)
       {
         return false;
       }
@@ -374,9 +382,14 @@ namespace App
     // If the window handle is null, return false
     if (m_window == nullptr)
     {
-      if (Config::FULLSCREEN)
+      // If was fullscreen, revert display settings
+      if (m_fullscreen)
       {
-        if (not changeDisplaySettings(false))
+        try
+        {
+          changeDisplaySettings(false);
+        }
+        catch (...)
         {
           return false;
         }
@@ -388,8 +401,7 @@ namespace App
     return true;
   }
 
-  [[nodiscard]]
-  auto App::changeDisplaySettings(bool custom) noexcept -> bool
+  auto App::changeDisplaySettings(bool custom) -> void
   {
     if (custom)
     {
@@ -397,7 +409,7 @@ namespace App
       if (ChangeDisplaySettings(&m_deviceMode, CDS_FULLSCREEN)
           != DISP_CHANGE_SUCCESSFUL)
       {
-        return false;
+        throw std::runtime_error("Failed to change display settings!");
       }
     }
     else
@@ -407,19 +419,100 @@ namespace App
 
       /*[Remark]:
        *-----------------------------------------------------------------------*
-       |   We should be checking the return value of ChangeDisplaySettings but,|
-       | sometimes call fails and causes the program to crash. We will ignore  |
-       | the return value for now and hope for the best.                       |
+       |   We should be checking the return value of the ChangeDisplaySettings |
+       | but, sometimes call seems to fail and causes our program to crash. We |
+       | will ignore the return value for now and hope for the best.           |
        *----------------------------------------------------------------------*/
     }
-    return true;
   }
 
-  auto App::changeDisplaySettingsEx(bool custom) -> void
+  auto App::enterFullscreen() -> void
   {
-    if (not changeDisplaySettings(custom))
+    // Window variables for fullscreen mode
+    constexpr std::uint32_t WINDOW_STYLE{WS_POPUP};
+    constexpr int           WINDOW_X{};
+    constexpr int           WINDOW_Y{};
+    constexpr std::int32_t  WINDOW_WIDTH{Config::SCREEN_WIDTH};
+    constexpr std::int32_t  WINDOW_HEIGHT{Config::SCREEN_HEIGHT};
+
+    // Change window style
+    if (SetWindowLongPtr(m_window, GWL_STYLE, WINDOW_STYLE) == 0)
     {
-      throw std::runtime_error("Failed to change display settings!");
+      throw std::runtime_error{"Failed to change window style!"};
     }
+
+    // Change window size and position
+    if (SetWindowPos(
+          m_window,
+          nullptr,
+          WINDOW_X,
+          WINDOW_Y,
+          WINDOW_WIDTH,
+          WINDOW_HEIGHT,
+          SWP_FRAMECHANGED bitor SWP_SHOWWINDOW
+        )
+        == 0)
+    {
+      throw std::runtime_error{"Failed to change window size and position!"};
+    }
+
+    // Change the display settings
+    changeDisplaySettings(true);
+
+    m_fullscreen = {true};
+  }
+
+  auto App::exitFullscreen() -> void
+  {
+    // Restore the display settings
+    changeDisplaySettings(false);
+
+    // Window variables for windowed mode
+    constexpr std::uint32_t WINDOW_STYLE{
+      WS_POPUPWINDOW bitor WS_CAPTION bitor WS_MINIMIZEBOX
+    };
+    int          windowX{};
+    int          windowY{};
+    std::int32_t windowWidth{Config::SCREEN_WIDTH};
+    std::int32_t windowHeight{Config::SCREEN_HEIGHT};
+
+    // Adjust the window size
+    RECT rect{0, 0, windowWidth, windowHeight};
+    AdjustWindowRect(&rect, WINDOW_STYLE, static_cast<BOOL>(false));
+
+    // Calculate and alter the window size
+    windowWidth  = {rect.right - rect.left};
+    windowHeight = {rect.bottom - rect.top};
+
+    // Get the dimensions of the screen
+    const int screenWidth{GetSystemMetrics(SM_CXSCREEN)};
+    const int screenHeight{GetSystemMetrics(SM_CYSCREEN)};
+
+    // Calculate and alter the position to center the window
+    windowX = {(screenWidth - windowWidth) / 2};
+    windowY = {(screenHeight - windowHeight) / 2};
+
+    // Change window style
+    if (SetWindowLongPtr(m_window, GWL_STYLE, WINDOW_STYLE) == 0)
+    {
+      throw std::runtime_error{"Failed to change window style!"};
+    }
+
+    // Change window size and position
+    if (SetWindowPos(
+          m_window,
+          nullptr,
+          windowX,
+          windowY,
+          windowWidth,
+          windowHeight,
+          SWP_FRAMECHANGED bitor SWP_SHOWWINDOW
+        )
+        == 0)
+    {
+      throw std::runtime_error{"Failed to change window size and position!"};
+    }
+
+    m_fullscreen = {false};
   }
 } // namespace App

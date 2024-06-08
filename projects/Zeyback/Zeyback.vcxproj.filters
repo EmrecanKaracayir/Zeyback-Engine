@@ -42,7 +42,7 @@
     <ClInclude Include="src\pch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\Config\Config.hpp">
+    <ClInclude Include="src\Game\Config\config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Event\Mouse.hpp">

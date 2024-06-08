@@ -3,7 +3,7 @@
 #include "Platform/Windows/GDI/DeviceContext.hpp"
 
 #include "Engine/Math/Rectangle.tpp"
-#include "Game/Config/Config.hpp"
+#include "Game/Config/config.hpp"
 
 #include <windef.h>
 #include <wingdi.h>
