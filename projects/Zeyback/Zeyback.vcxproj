@@ -48,7 +48,9 @@
     <ClInclude Include="src\Platform\Windows\GDI\Bitmap.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\Brush.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\Color.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\Cursor.hpp" />
     <ClInclude Include="src\Platform\Windows\GDI\DeviceContext.hpp" />
+    <ClInclude Include="src\Platform\Windows\GDI\Icon.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App\App.cpp" />
@@ -66,7 +68,9 @@
     <ClCompile Include="src\Platform\Windows\GDI\Bitmap.cpp" />
     <ClCompile Include="src\Platform\Windows\GDI\Brush.cpp" />
     <ClCompile Include="src\Platform\Windows\GDI\Color.cpp" />
+    <ClCompile Include="src\Platform\Windows\GDI\Cursor.cpp" />
     <ClCompile Include="src\Platform\Windows\GDI\DeviceContext.cpp" />
+    <ClCompile Include="src\Platform\Windows\GDI\Icon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\res.rc" />

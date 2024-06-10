@@ -6,7 +6,9 @@
 #include "Engine/Event/Mouse.hpp"
 #include "Game/Config/config.hpp"
 #include "Game/Resource/resource.hpp"
+#include "Platform/Windows/GDI/Cursor.hpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
+#include "Platform/Windows/GDI/Icon.hpp"
 
 #include <minwindef.h>
 #include <sal.h>
@@ -19,8 +21,6 @@
 #include <cstdint>
 #include <stdexcept>
 #include <Support/util>
-
-// TODO(EmrecanKaracayir): onRender gets called before onCreate fix it.
 
 namespace
 {
@@ -42,60 +42,33 @@ namespace App
   [[nodiscard]]
   auto App::onCreate(HINSTANCE instance) noexcept -> bool
   {
-    // Set the instance handle
-    m_instance = {instance};
-
-    // Load icon
-    m_appIcon = {LoadIcon(instance, MAKEINTRESOURCE(IDIC_APP))};
-
-    // If the icon is null, return false
-    if (m_appIcon == nullptr)
+    // Create the engine
+    if (not Zeyback::getInstance().onCreate())
     {
       return false;
     }
 
-    // Load cursors
-    m_pointerCursor = {LoadCursor(instance, MAKEINTRESOURCE(IDCC_POINTER))};
+    // Create the application
+    try
+    {
+      // Set the instance handle
+      m_instance = {instance};
 
-    // If the cursor is null, return false
-    if (m_pointerCursor == nullptr)
+      // Load icon
+      m_icon.reinitialize(instance, IDIC_APP);
+
+      // Load cursor
+      m_cursor.reinitialize(instance, IDCC_POINTER);
+
+      // Create window
+      createWindow();
+
+      return true;
+    }
+    catch (...)
     {
       return false;
     }
-
-    // Create the window class
-    WNDCLASSEX windowClass{};
-    windowClass.cbSize        = {sizeof(WNDCLASSEX)};
-    windowClass.style         = {CS_HREDRAW bitor CS_VREDRAW};
-    windowClass.lpfnWndProc   = {windowProcedure};
-    windowClass.cbClsExtra    = {};
-    windowClass.cbWndExtra    = {};
-    windowClass.hInstance     = {instance};
-    windowClass.hIcon         = {m_appIcon};
-    windowClass.hIconSm       = {m_appIcon};
-    windowClass.hCursor       = {m_pointerCursor};
-    windowClass.hbrBackground = {GetSysColorBrush(COLOR_WINDOW)};
-    windowClass.lpszMenuName  = {nullptr};
-    windowClass.lpszClassName = {Config::TITLE};
-
-    // Register the window class
-    if (not RegisterClassEx(&windowClass))
-    {
-      return false;
-    }
-
-    // Create the window
-    if (not createWindow(windowClass))
-    {
-      return false;
-    }
-
-    // Show and update the window
-    ShowWindow(m_window, SW_SHOW);
-    UpdateWindow(m_window);
-
-    // App created, return the engine creation result
-    return Zeyback::getInstance().onCreate();
   }
 
   /*--------------------------------------------------------------------------*\
@@ -105,7 +78,8 @@ namespace App
   [[nodiscard]]
   auto App::getInstance() noexcept -> App&
   {
-    static App s_instance{};
+    // NOLINTNEXTLINE
+    static App s_instance;
     return s_instance;
   }
 
@@ -114,9 +88,6 @@ namespace App
     _In_ HWND window, _In_ UINT message, _In_ WPARAM wParam, _In_ LPARAM lParam
   ) -> LRESULT
   {
-    // Initialize heavy objects
-    PAINTSTRUCT paintStruct{};
-
     // Message handling
     switch (message)
     {
@@ -129,7 +100,7 @@ namespace App
     case WM_SETCURSOR:
     {
       // Set the cursor to the pointer cursor
-      SetCursor(getInstance().m_pointerCursor);
+      SetCursor(getInstance().m_cursor.getHandle());
       return 0;
     }
     case WM_ACTIVATE:
@@ -169,6 +140,9 @@ namespace App
     }
     case WM_PAINT:
     {
+      // Initialize paint structure
+      PAINTSTRUCT paintStruct{};
+
       // Get device context by beginning paint
       const GDI::DeviceContext deviceContext{
         GDI::DeviceContext::Action::ACCESS, BeginPaint(window, &paintStruct)
@@ -310,11 +284,31 @@ namespace App
   *| [private]: Methods                                                       |*
   \*--------------------------------------------------------------------------*/
 
-  [[nodiscard]]
-  auto App::createWindow(const WNDCLASSEX& windowClass) noexcept -> bool
+  auto App::createWindow() -> void
   {
+    // Initialize the window class
+    WNDCLASSEX windowClass{};
+    windowClass.cbSize        = {sizeof(WNDCLASSEX)};
+    windowClass.style         = {CS_HREDRAW bitor CS_VREDRAW};
+    windowClass.lpfnWndProc   = {windowProcedure};
+    windowClass.cbClsExtra    = {};
+    windowClass.cbWndExtra    = {};
+    windowClass.hInstance     = {m_instance};
+    windowClass.hIcon         = {m_icon.getHandle()};
+    windowClass.hIconSm       = {m_icon.getHandle()};
+    windowClass.hCursor       = {m_cursor.getHandle()};
+    windowClass.hbrBackground = {GetSysColorBrush(COLOR_WINDOW)};
+    windowClass.lpszMenuName  = {nullptr};
+    windowClass.lpszClassName = {Config::TITLE};
+
+    // Register the window class
+    if (not RegisterClassEx(&windowClass))
+    {
+      throw std::runtime_error{"Failed to register window class!"};
+    }
+
     // Window variables for fullscreen mode
-    std::uint32_t windowStyle{WS_POPUP};
+    std::uint32_t windowStyle{WS_POPUPWINDOW};
     int           windowX{};
     int           windowY{};
     std::int32_t  windowWidth{Config::SCREEN_WIDTH};
@@ -353,15 +347,8 @@ namespace App
     }
     else
     {
-      try
-      {
-        // Change display settings for fullscreen
-        changeDisplaySettings(true);
-      }
-      catch (...)
-      {
-        return false;
-      }
+      // Change display settings for fullscreen
+      changeDisplaySettings(true);
     }
 
     // Create the window
@@ -385,20 +372,27 @@ namespace App
       // If was fullscreen, revert display settings
       if (m_fullscreen)
       {
-        try
-        {
-          changeDisplaySettings(false);
-        }
-        catch (...)
-        {
-          return false;
-        }
+        changeDisplaySettings(false);
       }
-      return false;
+
+      // Unregister the window class
+      if (UnregisterClass(windowClass.lpszClassName, m_instance) == 0)
+      {
+        throw std::runtime_error{"Failed to unregister window class!"};
+      }
+
+      // Throw the exception
+      throw std::runtime_error{"Failed to create window!"};
     }
 
-    // Return true if the window was created successfully
-    return true;
+    // Show window
+    ShowWindow(m_window, SW_SHOW);
+
+    // Update window
+    if (UpdateWindow(m_window) == 0)
+    {
+      throw std::runtime_error{"Failed to update window!"};
+    }
   }
 
   auto App::changeDisplaySettings(bool custom) -> void
@@ -429,7 +423,7 @@ namespace App
   auto App::enterFullscreen() -> void
   {
     // Window variables for fullscreen mode
-    constexpr std::uint32_t WINDOW_STYLE{WS_POPUP};
+    constexpr std::uint32_t WINDOW_STYLE{WS_POPUPWINDOW};
     constexpr int           WINDOW_X{};
     constexpr int           WINDOW_Y{};
     constexpr std::int32_t  WINDOW_WIDTH{Config::SCREEN_WIDTH};

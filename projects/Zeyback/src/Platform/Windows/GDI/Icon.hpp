@@ -1,29 +1,14 @@
 #pragma once
 
-#include "Game/Config/config.hpp"
-#include "Platform/Windows/GDI/Cursor.hpp"
-#include "Platform/Windows/GDI/Icon.hpp"
-
 #include <minwindef.h>
-#include <sal.h>
 #include <windef.h>
-#include <wingdi.h>
-#include <winnt.h>
 
-// -------------------------< Forward Declarations >------------------------- //
-auto WINAPI
-WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) -> int;
+#include <cstdint>
+#include <Support/zstring>
 
-namespace
+namespace Platform::Windows::GDI
 {
-  // -------------------------< Namespace Aliases >-------------------------- //
-  namespace Config = Game::Config;
-  namespace GDI    = Platform::Windows::GDI;
-} // namespace
-
-namespace App
-{
-  class App
+  class Icon
   {
   public:
     /*------------------------------------------------------------------------*\
@@ -34,19 +19,23 @@ namespace App
     *| [public]: Constructors                                                 |*
     \*------------------------------------------------------------------------*/
 
-    App(const App&) noexcept = delete;
-    App(App&&) noexcept      = delete;
+    Icon(const Icon&) noexcept = delete;
+    Icon(Icon&&) noexcept      = delete;
+    Icon() noexcept            = default;
+    Icon(HINSTANCE instance, std::uint16_t resourceId);
 
     /*------------------------------------------------------------------------*\
     *| [public]: Destructor                                                   |*
     \*------------------------------------------------------------------------*/
 
+    ~Icon() noexcept;
+
     /*------------------------------------------------------------------------*\
     *| [public]: Operators                                                    |*
     \*------------------------------------------------------------------------*/
 
-    auto operator=(const App&) noexcept -> App& = delete;
-    auto operator=(App&&) noexcept -> App&      = delete;
+    auto operator=(const Icon&) noexcept -> Icon& = delete;
+    auto operator=(Icon&&) noexcept -> Icon&      = delete;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Static methods                                               |*
@@ -60,8 +49,7 @@ namespace App
     *| [public]: Methods                                                      |*
     \*------------------------------------------------------------------------*/
 
-    [[nodiscard]]
-    auto onCreate(HINSTANCE instance) noexcept -> bool;
+    auto reinitialize(HINSTANCE instance, std::uint16_t resourceId) -> void;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Fields                                                       |*
@@ -70,6 +58,9 @@ namespace App
     /*------------------------------------------------------------------------*\
     *| [public]: Accessors                                                    |*
     \*------------------------------------------------------------------------*/
+
+    [[nodiscard]]
+    auto getHandle() const -> HICON;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Mutators                                                     |*
@@ -115,13 +106,9 @@ namespace App
     *| [private]: Constructors                                                |*
     \*------------------------------------------------------------------------*/
 
-    App() noexcept = default;
-
     /*------------------------------------------------------------------------*\
     *| [private]: Destructor                                                  |*
     \*------------------------------------------------------------------------*/
-
-    ~App() = default;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Operators                                                   |*
@@ -131,18 +118,6 @@ namespace App
     *| [private]: Static methods                                              |*
     \*------------------------------------------------------------------------*/
 
-    [[nodiscard]]
-    static auto getInstance() noexcept -> App&;
-    [[nodiscard]]
-    static auto CALLBACK windowProcedure(
-      _In_ HWND   window,
-      _In_ UINT   message,
-      _In_ WPARAM wParam,
-      _In_ LPARAM lParam
-    ) -> LRESULT;
-    [[nodiscard]]
-    static auto run() noexcept -> WPARAM;
-
     /*------------------------------------------------------------------------*\
     *| [private]: Static fields                                               |*
     \*------------------------------------------------------------------------*/
@@ -151,28 +126,18 @@ namespace App
     *| [private]: Methods                                                     |*
     \*------------------------------------------------------------------------*/
 
-    auto createWindow() -> void;
-    auto changeDisplaySettings(bool custom) -> void;
-    auto enterFullscreen() -> void;
-    auto exitFullscreen() -> void;
+    auto initialize(const gsl::wzstring& resourceString) -> void;
+    auto cleanup() noexcept -> void;
 
     /*------------------------------------------------------------------------*\
     *| [private]: Fields                                                      |*
     \*------------------------------------------------------------------------*/
 
-    HINSTANCE   m_instance{};
-    HWND        m_window{};
-    GDI::Icon   m_icon;
-    GDI::Cursor m_cursor;
-    DEVMODE     m_deviceMode{};
-    bool        m_fullscreen{Config::START_FULLSCREEN};
+    HINSTANCE m_instance{nullptr};
+    HICON     m_icon{nullptr};
 
     /*------------------------------------------------------------------------*\
     *| [private]: Friends                                                     |*
     \*------------------------------------------------------------------------*/
-
-    friend auto WINAPI ::WinMain(
-      _In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int
-    ) -> int;
   };
-} // namespace App
+} // namespace Platform::Windows::GDI
