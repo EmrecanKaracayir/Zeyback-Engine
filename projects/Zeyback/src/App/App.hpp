@@ -62,6 +62,8 @@ namespace App
 
     [[nodiscard]]
     auto onCreate(HINSTANCE instance) noexcept -> bool;
+    [[nodiscard]]
+    auto onStart() const noexcept -> bool;
 
     /*------------------------------------------------------------------------*\
     *| [public]: Fields                                                       |*

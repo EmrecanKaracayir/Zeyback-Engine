@@ -28,7 +28,7 @@ namespace Engine
   [[nodiscard]]
   auto Engine::onCreate() noexcept -> bool
   {
-    // Create the game
+    // Engine created, return the game creation result
     return SandboxGame::getInstance().onCreate();
   }
 

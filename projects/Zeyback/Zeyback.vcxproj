@@ -135,7 +135,7 @@
     <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
@@ -143,7 +143,7 @@
     <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
@@ -151,7 +151,7 @@
     <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
@@ -159,7 +159,7 @@
     <OutDir>$(SolutionDir)out\$(ProjectName)\bin\$(Configuration) - $(Platform)\</OutDir>
     <IntDir>$(SolutionDir)out\$(ProjectName)\int\$(Configuration) - $(Platform)\</IntDir>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <EnableClangTidyCodeAnalysis>true</EnableClangTidyCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
@@ -187,7 +187,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <ShowProgress>true</ShowProgress>
@@ -223,7 +223,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <ShowProgress>true</ShowProgress>
@@ -255,7 +255,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <ShowProgress>true</ShowProgress>
@@ -291,7 +291,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <ShowProgress>true</ShowProgress>

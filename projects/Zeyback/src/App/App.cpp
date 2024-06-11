@@ -6,10 +6,12 @@
 #include "Engine/Event/Mouse.hpp"
 #include "Game/Config/config.hpp"
 #include "Game/Resource/resource.hpp"
+#include "Platform/Windows/GDI/Color.hpp"
 #include "Platform/Windows/GDI/Cursor.hpp"
 #include "Platform/Windows/GDI/DeviceContext.hpp"
 #include "Platform/Windows/GDI/Icon.hpp"
 
+#include <dwmapi.h>
 #include <minwindef.h>
 #include <sal.h>
 #include <sysinfoapi.h>
@@ -42,16 +44,10 @@ namespace App
   [[nodiscard]]
   auto App::onCreate(HINSTANCE instance) noexcept -> bool
   {
-    // Create the engine
-    if (not Zeyback::getInstance().onCreate())
-    {
-      return false;
-    }
-
-    // Create the application
+    // Create the app
     try
     {
-      // Set the instance handle
+      // Set the instance
       m_instance = {instance};
 
       // Load icon
@@ -62,13 +58,25 @@ namespace App
 
       // Create window
       createWindow();
-
-      return true;
     }
     catch (...)
     {
+      // Create failed, return false
       return false;
     }
+
+    // App created, return the engine creation result
+    return Zeyback::getInstance().onCreate();
+  }
+
+  [[nodiscard]]
+  auto App::onStart() const noexcept -> bool
+  {
+    // Show window
+    ShowWindow(m_window, SW_SHOW);
+
+    // Update window, return the result
+    return UpdateWindow(m_window) != 0;
   }
 
   /*--------------------------------------------------------------------------*\
@@ -99,9 +107,13 @@ namespace App
     }
     case WM_SETCURSOR:
     {
-      // Set the cursor to the pointer cursor
-      SetCursor(getInstance().m_cursor.getHandle());
-      return 0;
+      if (LOWORD(lParam) == HTCLIENT)
+      {
+        // Set the cursor to the arrow cursor
+        SetCursor(getInstance().m_cursor.getHandle());
+        return 0;
+      }
+      break;
     }
     case WM_ACTIVATE:
     {
@@ -157,7 +169,7 @@ namespace App
     }
     case WM_KEYDOWN:
     {
-      if (wParam == VK_F11)
+      if (wParam == Config::FULLSCREEN_TOGGLE_KEY)
       {
         getInstance().m_fullscreen
           ? getInstance().exitFullscreen()
@@ -288,7 +300,7 @@ namespace App
   {
     // Initialize the window class
     WNDCLASSEX windowClass{};
-    windowClass.cbSize        = {sizeof(WNDCLASSEX)};
+    windowClass.cbSize        = {sizeof(windowClass)};
     windowClass.style         = {CS_HREDRAW bitor CS_VREDRAW};
     windowClass.lpfnWndProc   = {windowProcedure};
     windowClass.cbClsExtra    = {};
@@ -297,7 +309,7 @@ namespace App
     windowClass.hIcon         = {m_icon.getHandle()};
     windowClass.hIconSm       = {m_icon.getHandle()};
     windowClass.hCursor       = {m_cursor.getHandle()};
-    windowClass.hbrBackground = {GetSysColorBrush(COLOR_WINDOW)};
+    windowClass.hbrBackground = {GetStockBrush(BLACK_BRUSH)};
     windowClass.lpszMenuName  = {nullptr};
     windowClass.lpszClassName = {Config::TITLE};
 
@@ -307,12 +319,16 @@ namespace App
       throw std::runtime_error{"Failed to register window class!"};
     }
 
+    // Dimension constants for the screen
+    const std::int32_t screenWidth{GetSystemMetrics(SM_CXSCREEN)};
+    const std::int32_t screenHeight{GetSystemMetrics(SM_CYSCREEN)};
+
     // Window variables for fullscreen mode
-    std::uint32_t windowStyle{WS_POPUPWINDOW};
+    std::uint32_t windowStyle{WS_POPUP};
     int           windowX{};
     int           windowY{};
-    std::int32_t  windowWidth{Config::SCREEN_WIDTH};
-    std::int32_t  windowHeight{Config::SCREEN_HEIGHT};
+    std::int32_t  windowWidth{screenWidth};
+    std::int32_t  windowHeight{screenHeight};
 
     // Initialize the device mode
     m_deviceMode.dmSize       = {sizeof(m_deviceMode)};
@@ -327,7 +343,7 @@ namespace App
     if (not m_fullscreen)
     {
       // Alter window style
-      windowStyle = {WS_POPUPWINDOW bitor WS_CAPTION bitor WS_MINIMIZEBOX};
+      windowStyle = {WS_OVERLAPPEDWINDOW};
 
       // Adjust the window size
       RECT rect{0, 0, windowWidth, windowHeight};
@@ -337,13 +353,12 @@ namespace App
       windowWidth  = {rect.right - rect.left};
       windowHeight = {rect.bottom - rect.top};
 
-      // Get the dimensions of the screen
-      const int screenWidth{GetSystemMetrics(SM_CXSCREEN)};
-      const int screenHeight{GetSystemMetrics(SM_CYSCREEN)};
-
       // Calculate and alter the position to center the window
       windowX = {(screenWidth - windowWidth) / 2};
       windowY = {(screenHeight - windowHeight) / 2};
+
+      // Set title bar to black
+      const GDI::Color titleBarColor{0, 0, 0};
     }
     else
     {
@@ -385,14 +400,19 @@ namespace App
       throw std::runtime_error{"Failed to create window!"};
     }
 
-    // Show window
-    ShowWindow(m_window, SW_SHOW);
+    // Set title bar color
+    DwmSetWindowAttribute(
+      m_window,
+      DWMWA_CAPTION_COLOR,
+      &Config::TITLE_BAR_COLOR,
+      sizeof(Config::TITLE_BAR_COLOR)
+    );
 
-    // Update window
-    if (UpdateWindow(m_window) == 0)
-    {
-      throw std::runtime_error{"Failed to update window!"};
-    }
+    /*--< Remark >-------------------------------------------------------------*
+    |   Setting caption color from DWM only supported on Windows 11. This call |
+    | will fail on Windows 10 and below. This will not crash the program, it's |
+    | just a visual enhancement.                                               |
+    *-------------------------------------------------------------------------*/
   }
 
   auto App::changeDisplaySettings(bool custom) -> void
@@ -411,23 +431,26 @@ namespace App
       // Restore the display settings
       ChangeDisplaySettings(nullptr, 0);
 
-      /*[Remark]:
-       *-----------------------------------------------------------------------*
-       |   We should be checking the return value of the ChangeDisplaySettings |
-       | but, sometimes call seems to fail and causes our program to crash. We |
-       | will ignore the return value for now and hope for the best.           |
-       *----------------------------------------------------------------------*/
+      /*--< Remark >-----------------------------------------------------------*
+      |   We should be checking the return value of the ChangeDisplaySettings, |
+      | but sometimes call seems to fail and causes our program to crash. We   |
+      | will ignore the return value for now and hope for the best.            |
+      *-----------------------------------------------------------------------*/
     }
   }
 
   auto App::enterFullscreen() -> void
   {
+    // Dimension constants for the screen
+    const std::int32_t screenWidth{GetSystemMetrics(SM_CXSCREEN)};
+    const std::int32_t screenHeight{GetSystemMetrics(SM_CYSCREEN)};
+
     // Window variables for fullscreen mode
-    constexpr std::uint32_t WINDOW_STYLE{WS_POPUPWINDOW};
+    constexpr std::uint32_t WINDOW_STYLE{WS_POPUP};
     constexpr int           WINDOW_X{};
     constexpr int           WINDOW_Y{};
-    constexpr std::int32_t  WINDOW_WIDTH{Config::SCREEN_WIDTH};
-    constexpr std::int32_t  WINDOW_HEIGHT{Config::SCREEN_HEIGHT};
+    const std::int32_t      windowWidth{screenWidth};
+    const std::int32_t      windowHeight{screenHeight};
 
     // Change window style
     if (SetWindowLongPtr(m_window, GWL_STYLE, WINDOW_STYLE) == 0)
@@ -441,8 +464,8 @@ namespace App
           nullptr,
           WINDOW_X,
           WINDOW_Y,
-          WINDOW_WIDTH,
-          WINDOW_HEIGHT,
+          windowWidth,
+          windowHeight,
           SWP_FRAMECHANGED bitor SWP_SHOWWINDOW
         )
         == 0)
@@ -461,14 +484,16 @@ namespace App
     // Restore the display settings
     changeDisplaySettings(false);
 
+    // Dimension constants for the screen
+    const int screenWidth{GetSystemMetrics(SM_CXSCREEN)};
+    const int screenHeight{GetSystemMetrics(SM_CYSCREEN)};
+
     // Window variables for windowed mode
-    constexpr std::uint32_t WINDOW_STYLE{
-      WS_POPUPWINDOW bitor WS_CAPTION bitor WS_MINIMIZEBOX
-    };
-    int          windowX{};
-    int          windowY{};
-    std::int32_t windowWidth{Config::SCREEN_WIDTH};
-    std::int32_t windowHeight{Config::SCREEN_HEIGHT};
+    constexpr std::uint32_t WINDOW_STYLE{WS_OVERLAPPEDWINDOW};
+    int                     windowX{};
+    int                     windowY{};
+    std::int32_t            windowWidth{Config::SCREEN_WIDTH};
+    std::int32_t            windowHeight{Config::SCREEN_HEIGHT};
 
     // Adjust the window size
     RECT rect{0, 0, windowWidth, windowHeight};
@@ -477,10 +502,6 @@ namespace App
     // Calculate and alter the window size
     windowWidth  = {rect.right - rect.left};
     windowHeight = {rect.bottom - rect.top};
-
-    // Get the dimensions of the screen
-    const int screenWidth{GetSystemMetrics(SM_CXSCREEN)};
-    const int screenHeight{GetSystemMetrics(SM_CYSCREEN)};
 
     // Calculate and alter the position to center the window
     windowX = {(screenWidth - windowWidth) / 2};
@@ -495,7 +516,7 @@ namespace App
     // Change window size and position
     if (SetWindowPos(
           m_window,
-          nullptr,
+          HWND_TOP,
           windowX,
           windowY,
           windowWidth,
@@ -506,6 +527,24 @@ namespace App
     {
       throw std::runtime_error{"Failed to change window size and position!"};
     }
+
+    /*--< Remark >-------------------------------------------------------------*
+    |   Launching the app in fullscreen mode seems to be the reason of caption |
+    | icon getting lost. For some odd behavior Windows won't draw caption icon |
+    | after changing the window's style back to WS_OVERLAPPEDWINDOW. Explicit  |
+    | call to SendMessage with WM_SETICON seems to solve our problem for now.  |
+    *-------------------------------------------------------------------------*/
+
+#pragma warning(disable : 26'490)
+    // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
+    SendMessage(
+      m_window,
+      WM_SETICON,
+      ICON_SMALL,
+      reinterpret_cast<LPARAM>(m_icon.getHandle())
+    );
+    // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
+#pragma warning(default : 26'490)
 
     m_fullscreen = {false};
   }

@@ -58,7 +58,7 @@ namespace Engine
     \*------------------------------------------------------------------------*/
 
     [[nodiscard]]
-    auto onCreate() noexcept -> bool;
+    auto onCreate(HWND window) noexcept -> bool;
     auto onStart() const noexcept -> void;
     auto onResume() noexcept -> void;
     auto onHandleKeyInput() const noexcept -> void;

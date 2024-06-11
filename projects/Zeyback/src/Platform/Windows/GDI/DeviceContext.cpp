@@ -206,13 +206,12 @@ namespace Platform::Windows::GDI
       }
       case Action::ACCESS:
       {
-        /*[Remark]:
-         *---------------------------------------------------------------------*
-         |   We should be releasing the device context of the window that was  |
-         | passed to us. However, we only use our window's device context in   |
-         | specific places where releasing resources are managed by the API.   |
-         |   Example: BeginPaint and EndPaint functions.                       |
-         *--------------------------------------------------------------------*/
+        /*--< Remark >---------------------------------------------------------*
+        |   We should be releasing the device context of the window that was   |
+        | passed to us. However, we only use our window's device context in    |
+        | specific places where releasing resources are managed by the API.    |
+        |   Example: BeginPaint and EndPaint functions.                        |
+        *---------------------------------------------------------------------*/
         break;
       }
       }

@@ -21,8 +21,8 @@ auto WINAPI WinMain(
   // Get instance
   auto& app = App::App::getInstance();
 
-  // Initialize the application
-  if (not app.onCreate(instance))
+  // Create and start the application
+  if (not app.onCreate(instance) or not app.onStart())
   {
     return EXIT_FAILURE;
   }
